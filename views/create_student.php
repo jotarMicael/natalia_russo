@@ -13,7 +13,8 @@ require_once '../utils/const.php';
 $nav = 'ce';
 
 if (!empty($_POST)) {
-  var_dump($_POST);die;
+  var_dump($_POST);
+  die;
 }
 ?>
 
@@ -33,7 +34,7 @@ if (!empty($_POST)) {
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/dist/css/adminlte.min.css">
-
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/dist/css/cards.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
   <!-- iCheck for checkboxes and radio inputs -->
@@ -55,7 +56,8 @@ if (!empty($_POST)) {
 
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+
   <div class="wrapper">
     <!-- Navbar -->
 
@@ -65,40 +67,35 @@ if (!empty($_POST)) {
     <?php require_once ROOTPATH . '/common/navbar.php' ?>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Alta de alumno</h1>
-            </div>
-          </div>
-        </div><!-- /.container-fluid -->
-      </section>
 
-      <!-- Main content -->
-      <section class="content">
+
+    <div class="content-wrapper">
+
+      <div class="content-header">
+
+      </div>
+
+
+      <div class="content">
         <div class="container-fluid">
           <div class="row">
             <!-- left column -->
-            <div class="col-12">
-              <!-- general form elements -->
 
+            <!-- general form elements -->
+            <div class="card-deck">
               <!-- /.card -->
 
               <!-- general form elements -->
-              <div class="card card-maroon">
-                <div class="card-header">
-                  <h3 class="card-title">Ficha de salud y autorización infantil</h3>
+              <div class="card card-maroon card_style">
+                <div class="card-header ">
+                  <h3 style="float:none" class="card-title text-center">Ficha de salud y autorización infantil</h3>
                 </div>
 
                 <!-- /.card-header -->
                 <div class="card-body">
-
                   <div class="row">
-                    <div class="col-4">
-                      <h3><b>Datos Grales.</b></h3><br>
+                    <div class="card card_style">
+                      <h3><b><u>Datos Grales.</u></b></h3><br>
                       <form action="#" method="post">
                         <div class="form-group">
                           <label for="exampleInputBorderWidth2">Nombre</label>
@@ -175,8 +172,8 @@ if (!empty($_POST)) {
                           <input name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                         </div>
                     </div>
-                    <div class="col-4">
-                      <h3><b>Antecedentes clínicos</b></h3><br>
+                    <div class="card card_style">
+                      <h3><b><u>Antecedentes clínicos</u></b></h3><br>
                       <div class="form-group">
 
                         <label for="exampleInputBorderWidth2">¿Ha padecido alguna de las siguientes enfermedades?</label>
@@ -281,22 +278,18 @@ if (!empty($_POST)) {
 
 
                     </div>
-                    <div class="col-4">
-                      <h3><b>Firmas/Autorizaciones</b></h3><br>
+                    <div class="card card_style">
+                      <h3><b><u>Firmas/Autorizaciones</u></b></h3><br>
                       <div class="form-group">
                         <div class="custom-control custom-checkbox">
-                        <input class="custom-control-input" type="checkbox" id="authorized" name="authorized[]" value="1">
+                          <input class="custom-control-input" type="checkbox" id="authorized" name="authorized[]" value="1">
                           <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
-                          
+
 
                         </div>
                       </div>
                     </div>
                   </div>
-
-
-
-
                 </div>
                 <div class="card-footer">
                   <button type="submit" class="btn bg-maroon">Registrar</button>
@@ -307,21 +300,21 @@ if (!empty($_POST)) {
               <!-- /.card -->
 
 
-
-              <!-- Horizontal Form -->
-
-              <!-- /.card -->
-
             </div>
+            <!-- Horizontal Form -->
+
+            <!-- /.card -->
+
+
             <!--/.col (left) -->
             <!-- right column -->
 
             <!--/.col (right) -->
           </div>
-          <!-- /.row -->
-        </div><!-- /.container-fluid -->
-      </section>
-      <!-- /.content -->
+
+        </div>
+      </div>
+
     </div>
     <!-- /.content-wrapper -->
 
