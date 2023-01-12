@@ -79,228 +79,224 @@ if (!empty($_POST)) {
       <div class="content">
         <div class="container-fluid">
           <div class="row">
-            <!-- left column -->
 
-            <!-- general form elements -->
-            <div class="card-deck">
-              <!-- /.card -->
+            <div class="card card-maroon card_style">
 
-              <!-- general form elements -->
-              <div class="card card-maroon card_style">
-                <div class="card-header ">
-                  <h3 style="float:none" class="card-title text-center">Ficha de salud y autorización infantil</h3>
-                </div>
+              <div class="card-header">
+                <h3 style="float:none" class="card-title text-center">Ficha de salud y autorización infantil</h3>
+              </div>
 
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="row">
-                    <div class="card card_style">
-                      <h3><b><u>Datos Grales.</u></b></h3><br>
-                      <form action="#" method="post">
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Nombre</label>
-                          <input name="student_name" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Apellido/s</label>
-                          <input name="student_surname" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                        <div class="form-group">
-                          <label>Fecha de nacimiento</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                            </div>
-                            <input name="date_birth" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
-                          </div>
-                          <!-- /.input group -->
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Nombre de padre o tutor</label>
-                          <input type="father_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Nombre de madre o tutor</label>
-                          <input type="mother_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                        <div class="form-group">
-                          <label>Teléfono particular</label>
-
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input name="private_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label>Teléfono de urgencia</label>
-
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input name="emergency_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Domicilio</label>
-                          <input name="address" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Email de padres</label>
-                          <input name="email" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-
-                        <div class="form-group">
-                          <label for="exampleSelectBorderWidth2">Cobertura médica</label>
-
-                          <select name="medical_coverage" class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth2">
-                            <option value="0">Ninguna</option>
-                            <?php require_once ROOTPATH . '/controller/SocialWorkController.php';
-                            $social_work = new SocialWorkController();
-                            foreach ($social_work->get_social_works() as $sw) {
-                            ?>
-                              <option value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
-                            <?php } ?>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">N° afiliado</label>
-                          <input name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                    </div>
-                    <div class="card card_style">
-                      <h3><b><u>Antecedentes clínicos</u></b></h3><br>
+              <div class="card-body">
+                <div class="card-deck">
+                  <div class="card card_style">
+                    <h3><b><u>Datos Grales.</u></b></h3><br>
+                    <form action="#" method="post">
                       <div class="form-group">
-
-                        <label for="exampleInputBorderWidth2">¿Ha padecido alguna de las siguientes enfermedades?</label>
-
-                        <div class="container">
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <?php require_once ROOTPATH . '/controller/DiseaseController.php';
-                              $diseaseController = new DiseaseController();
-                              $diseases = $diseaseController->get_diseases(0);
-                              foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                            <div class="col-sm-6">
-
-                              <?php
-                              foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                          </div>
-
-                        </div><br>
-                        <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                        <input name="other_diseases_1" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <label for="exampleInputBorderWidth2">Nombre</label>
+                        <input name="student_name" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                       <div class="form-group">
-
-                        <label for="exampleInputBorderWidth2">¿Padece alguna de las siguientes enfermedades?</label>
-
-                        <div class="container">
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <?php
-                              $diseases = $diseaseController->get_diseases(1);
-
-                              foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                            <div class="col-sm-6">
-
-                              <?php
-                              foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                          </div>
-
-                        </div><br>
-                        <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                        <input name="other_diseases_2" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <label for="exampleInputBorderWidth2">Apellido/s</label>
+                        <input name="student_surname" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
-
                       <div class="form-group">
-                        <label for="exampleInputBorderWidth2">¿Estuvo alguna vez internado?:</label>
-                        <input name="internated" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
-                        <br><label for="exampleInputBorderWidth2">¿Fué intervenido quirúrgicamente?:</label>
-                        <input name="surgery" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
-                        <br><label for="exampleInputBorderWidth2">¿Toma alguna medicación?:</label>
-                        <input name="medication" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-                        <br><label for="exampleInputBorderWidth2">¿Tiene vacuna antitetánica?:</label>
+                        <label>Fecha de nacimiento</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
-
                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                           </div>
-                          <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                          <input name="date_birth" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                         </div>
-                        <br><label for="exampleInputBorderWidth2">¿Mantiene alguna dieta especial?:</label>
-                        <input name="diet" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-                        <br><label for="exampleInputBorderWidth2">¿Presenta algún cuadro alérgico?:</label>
-                        <input name="allergy" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                        <!-- /.input group -->
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputBorderWidth2">Nombre de padre o tutor</label>
+                        <input type="father_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputBorderWidth2">Nombre de madre o tutor</label>
+                        <input type="mother_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      </div>
+                      <div class="form-group">
+                        <label>Teléfono particular</label>
 
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input name="private_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Teléfono de urgencia</label>
+
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input name="emergency_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                        </div>
                       </div>
 
+                      <div class="form-group">
+                        <label for="exampleInputBorderWidth2">Domicilio</label>
+                        <input name="address" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      </div>
 
+                      <div class="form-group">
+                        <label for="exampleInputBorderWidth2">Email de padres</label>
+                        <input name="email" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleSelectBorderWidth2">Cobertura médica</label>
+
+                        <select name="medical_coverage" class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth2">
+                          <option value="0">Ninguna</option>
+                          <?php require_once ROOTPATH . '/controller/SocialWorkController.php';
+                          $social_work = new SocialWorkController();
+                          foreach ($social_work->get_social_works() as $sw) {
+                          ?>
+                            <option value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputBorderWidth2">N° afiliado</label>
+                        <input name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      </div>
+                  </div>
+                  <div class="card card_style">
+                    <h3><b><u>Antecedentes clínicos</u></b></h3><br>
+                    <div class="form-group">
+
+                      <label for="exampleInputBorderWidth2">¿Ha padecido alguna de las siguientes enfermedades?</label>
+
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <?php require_once ROOTPATH . '/controller/DiseaseController.php';
+                            $diseaseController = new DiseaseController();
+                            $diseases = $diseaseController->get_diseases(0);
+                            foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
+                            ?>
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
+                              </div>
+
+                            <?php } ?>
+
+                          </div>
+                          <div class="col-sm-6">
+
+                            <?php
+                            foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
+                            ?>
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
+                              </div>
+
+                            <?php } ?>
+
+                          </div>
+                        </div>
+
+                      </div><br>
+                      <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
+                      <input name="other_diseases_1" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                    </div>
+                    <div class="form-group">
+
+                      <label for="exampleInputBorderWidth2">¿Padece alguna de las siguientes enfermedades?</label>
+
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <?php
+                            $diseases = $diseaseController->get_diseases(1);
+
+                            foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
+                            ?>
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
+                              </div>
+
+                            <?php } ?>
+
+                          </div>
+                          <div class="col-sm-6">
+
+                            <?php
+                            foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
+                            ?>
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
+                              </div>
+
+                            <?php } ?>
+
+                          </div>
+                        </div>
+
+                      </div><br>
+                      <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
+                      <input name="other_diseases_2" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputBorderWidth2">¿Estuvo alguna vez internado?:</label>
+                      <input name="internated" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                      <br><label for="exampleInputBorderWidth2">¿Fué intervenido quirúrgicamente?:</label>
+                      <input name="surgery" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                      <br><label for="exampleInputBorderWidth2">¿Toma alguna medicación?:</label>
+                      <input name="medication" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                      <br><label for="exampleInputBorderWidth2">¿Tiene vacuna antitetánica?:</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                      </div>
+                      <br><label for="exampleInputBorderWidth2">¿Mantiene alguna dieta especial?:</label>
+                      <input name="diet" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                      <br><label for="exampleInputBorderWidth2">¿Presenta algún cuadro alérgico?:</label>
+                      <input name="allergy" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
 
                     </div>
-                    <div class="card card_style">
-                      <h3><b><u>Firmas/Autorizaciones</u></b></h3><br>
-                      <div class="form-group">
-                        <div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" id="authorized" name="authorized[]" value="1">
-                          <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
 
 
-                        </div>
+
+                  </div>
+                  <div class="card card_style">
+                    <h3><b><u>Firmas/Autorizaciones</u></b></h3><br>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input" type="checkbox" id="authorized" name="authorized[]" value="1">
+                        <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
+
+
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="card-footer">
-                  <button type="submit" class="btn bg-maroon">Registrar</button>
-                </div>
-                </form>
-                <!-- /.card-body -->
               </div>
-              <!-- /.card -->
 
+              <div class="card-footer">
+                <button type="submit" class="btn bg-maroon">Registrar</button>
+              </div>
 
+              </form>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
+
+
+
             <!-- Horizontal Form -->
 
             <!-- /.card -->
