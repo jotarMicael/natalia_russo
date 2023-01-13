@@ -109,7 +109,7 @@ if (!empty($_GET)) {
                                                 <tbody>
                                                     <?php $shares = explode(",", $student['shares']);
                                                     foreach (explode(",", $student['shares']) as $share) {
-                                                        $share = explode(": ", $share); ?>
+                                                        $share = explode(":", $share); ?>
                                                         <tr>
                                                             <td><?php echo $share[0]; ?></td>
                                                             <td><?php echo '$'.$share[1]; ?></td>

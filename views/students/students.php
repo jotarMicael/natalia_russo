@@ -115,16 +115,6 @@ else{
                         </tr>
                       <?php } ?>
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Fecha-Nacimiento</th>
-                        <th>Dirección</th>
-                        <th>Número privado</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->

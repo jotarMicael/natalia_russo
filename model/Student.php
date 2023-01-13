@@ -10,7 +10,7 @@ class Student
     private $table_name2 = "students_diseases";
     private $table_name3 = "social_works";
     private $table_name4 = "students_share";
-
+    private $table_name5 = "diseases";
 
     public function __construct($db)
     {
@@ -192,13 +192,13 @@ class Student
             s.diet,
             s.allergy,
             GROUP_CONCAT(d.name) AS diseases,
-            (SELECT GROUP_CONCAT(DISTINCT CONCAT(DATE_FORMAT(ss.share_date, '%m/%Y'),': ',ss.import) ORDER BY ss.share_date DESC) 
+            (SELECT GROUP_CONCAT(DISTINCT CONCAT(DATE_FORMAT(ss.share_date, '%m/%Y'),':',ss.import) ORDER BY ss.share_date DESC SEPARATOR ',') 
              FROM " . $this->table_name4 . "  ss 
              WHERE ss.student_id = s.id) AS shares   
              FROM " . $this->table_name . " s 
                 INNER JOIN ".$this->table_name3." sw ON (s.social_work_id=sw.id)
                 LEFT JOIN ".$this->table_name2." sd ON (s.id=sd.student_id)
-                LEFT JOIN diseases d ON (sd.id=d.id)
+                LEFT JOIN ".$this->table_name5." d ON (sd.id=d.id)
             WHERE s.id=:id and s.active=1
             GROUP BY s.id
             LIMIT 0,1
