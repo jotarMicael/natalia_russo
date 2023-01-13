@@ -20,7 +20,7 @@ class StudentController
 		
 	}
 
-	function get_all_students()
+	function get_all_student_actives()
 	{
 
 
@@ -30,8 +30,18 @@ class StudentController
 		$student = new Student($db);
 
 
-        return $student->get_all_student();
+        return $student->get_all_student_actives();
 		
+	}
+
+	function get_information_student($student_id){
+		$database = new Database();
+		$db = $database->getConnection();
+
+		$student = new Student($db);
+
+
+        return $student->get_information_student($student_id);
 	}
 
 }

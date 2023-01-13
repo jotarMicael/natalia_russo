@@ -170,13 +170,13 @@
 
           <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce','aa')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
-              <a href="<?php echo BASE_URL; ?>views/create_student.php" class="nav-link <?php echo $nav == 'ce' ? 'bg-orange' : ''; ?>">
+              <a href="<?php echo BASE_URL; ?>views/students/create_student.php" class="nav-link <?php echo $nav == 'ce' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
                 <p>Alta de alumno</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo BASE_URL; ?>views/students.php" class="nav-link <?php echo $nav == 'aa' ? 'bg-orange' : ''; ?>">
+              <a href="<?php echo BASE_URL; ?>views/students/students.php" class="nav-link <?php echo $nav == 'aa' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
                 <p>Ver alumnos</p>
               </a>

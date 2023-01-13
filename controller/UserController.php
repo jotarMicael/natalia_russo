@@ -45,7 +45,7 @@ class UserController
 			} elseif($user->rol == 'ADM') {
 				header('Location: adm/home/');
 			} */
-			header('Location: ' . BASE_URL . 'views/create_student.php');
+			header('Location: ' . BASE_URL . 'views/students/create_student.php');
 			die();
 		} else {
 			$errors['password'] = array("error" => "Usuario o clave incorrecta.");

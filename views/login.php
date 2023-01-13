@@ -25,6 +25,7 @@ if (!empty($_POST)) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
   <title><?php echo HEAD; ?> | Iniciar Sesión</title>
 
   <!-- Google Font: Source Sans Pro -->

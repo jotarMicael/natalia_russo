@@ -8,6 +8,9 @@ class Student
     private $conn;
     private $table_name = "students";
     private $table_name2 = "students_diseases";
+    private $table_name3 = "social_works";
+    private $table_name4 = "students_share";
+
 
     public function __construct($db)
     {
@@ -146,10 +149,11 @@ class Student
         }
     }
 
-    function get_all_student()
+    function get_all_student_actives()
     {
         try {
             $query = " SELECT * FROM " . $this->table_name . " s 
+            WHERE s.active=1
         ";
 
             $stmt = $this->conn->prepare($query);
@@ -161,5 +165,55 @@ class Student
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
+    }
+
+
+    function get_information_student(&$student_id){
+
+        try {
+            $query = " SELECT s.id,
+            s.name,
+            s.surname,
+            s.birth_date,
+            s.father_name,
+            s.mother_name,
+            s.private_phone_number,
+            s.emergency_phone_number,
+            s.address,
+            s.parents_email,
+            sw.name as social_work,
+            s.afiliate_number,
+            s.other_disease_1,
+            s.other_disease_2,
+            s.internal,
+            s.surgery,
+            s.medication,
+            s.tetanus_vaccine,
+            s.diet,
+            s.allergy,
+            GROUP_CONCAT(d.name) AS diseases,
+            (SELECT GROUP_CONCAT(DISTINCT CONCAT(DATE_FORMAT(ss.share_date, '%m/%Y'),': ',ss.import) ORDER BY ss.share_date DESC) 
+             FROM " . $this->table_name4 . "  ss 
+             WHERE ss.student_id = s.id) AS shares   
+             FROM " . $this->table_name . " s 
+                INNER JOIN ".$this->table_name3." sw ON (s.social_work_id=sw.id)
+                LEFT JOIN ".$this->table_name2." sd ON (s.id=sd.student_id)
+                LEFT JOIN diseases d ON (sd.id=d.id)
+            WHERE s.id=:id and s.active=1
+            GROUP BY s.id
+            LIMIT 0,1
+        ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':id',$student_id);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+
     }
 }
