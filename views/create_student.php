@@ -13,8 +13,9 @@ require_once '../utils/const.php';
 $nav = 'ce';
 
 if (!empty($_POST)) {
-  var_dump($_POST);
-  die;
+  require_once ROOTPATH . '/controller/StudentController.php';
+  $studentController = new StudentController();
+  $result = $studentController->insert_student($_POST);
 }
 ?>
 
@@ -72,6 +73,22 @@ if (!empty($_POST)) {
     <div class="content-wrapper">
 
       <div class="content-header">
+        <?php
+        if ($result[0] == 1) {
+
+          include ROOTPATH . '/common/alert_success.php';
+          unset($_POST);
+        }
+        elseif ($result[0] == 2) {
+
+          include ROOTPATH . '/common/alert_warning.php';
+        } 
+        elseif ($result[0] == 3) {
+
+          include ROOTPATH . '/common/alert_danger.php';
+        } 
+        unset($result);
+        ?>
 
       </div>
 
@@ -93,11 +110,11 @@ if (!empty($_POST)) {
                     <form action="#" method="post">
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Nombre</label>
-                        <input name="student_name" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="student_name" type="text" value="<?php echo $_POST ? $_POST['student_name'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Apellido/s</label>
-                        <input name="student_surname" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="student_surname" type="text" value="<?php echo $_POST ? $_POST['student_surname'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                       <div class="form-group">
                         <label>Fecha de nacimiento</label>
@@ -105,17 +122,17 @@ if (!empty($_POST)) {
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                           </div>
-                          <input name="date_birth" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                          <input required name="date_birth" type="text" value="<?php echo $_POST ? $_POST['date_birth'] : ''; ?>" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                         </div>
                         <!-- /.input group -->
                       </div>
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Nombre de padre o tutor</label>
-                        <input type="father_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="father_name" value="<?php echo $_POST ? $_POST['father_name'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Nombre de madre o tutor</label>
-                        <input type="mother_name" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="mother_name" value="<?php echo $_POST ? $_POST['mother_name'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                       <div class="form-group">
                         <label>Teléfono particular</label>
@@ -124,7 +141,7 @@ if (!empty($_POST)) {
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input name="private_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                          <input required name="private_number" value="<?php echo $_POST ? $_POST['private_number'] : ''; ?>" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
                       </div>
                       <div class="form-group">
@@ -134,36 +151,36 @@ if (!empty($_POST)) {
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input name="emergency_number" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                          <input required name="emergency_number" value="<?php echo $_POST ? $_POST['emergency_number'] : ''; ?>" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Domicilio</label>
-                        <input name="address" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">Email de padres</label>
-                        <input name="email" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required name="email" type="text" value="<?php echo $_POST ? $_POST['email'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
 
                       <div class="form-group">
                         <label for="exampleSelectBorderWidth2">Cobertura médica</label>
 
-                        <select name="medical_coverage" class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth2">
+                        <select required name="medical_coverage" class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth2">
                           <option value="0">Ninguna</option>
                           <?php require_once ROOTPATH . '/controller/SocialWorkController.php';
                           $social_work = new SocialWorkController();
                           foreach ($social_work->get_social_works() as $sw) {
                           ?>
-                            <option value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
+                            <option <?php ($_POST['medical_coverage']==$sw['id']) ? 'selected' : ''; ?> value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
                           <?php } ?>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="exampleInputBorderWidth2">N° afiliado</label>
-                        <input name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        <input required value="<?php echo $_POST ? $_POST['affiliate_number'] : ''; ?>"  name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                       </div>
                   </div>
                   <div class="card card_style">
@@ -205,7 +222,7 @@ if (!empty($_POST)) {
 
                       </div><br>
                       <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                      <input name="other_diseases_1" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      <input name="other_diseases_1" value="<?php echo $_POST ? $_POST['other_diseases_1'] : ''; ?>"  type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                     </div>
                     <div class="form-group">
 
@@ -244,42 +261,36 @@ if (!empty($_POST)) {
 
                       </div><br>
                       <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                      <input name="other_diseases_2" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                      <input name="other_diseases_2" value="<?php echo $_POST ? $_POST['other_diseases_2'] : ''; ?>"  type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                     </div>
 
                     <div class="form-group">
                       <label for="exampleInputBorderWidth2">¿Estuvo alguna vez internado?:</label>
-                      <input name="internated" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                      <input name="internated" value="<?php echo $_POST ? $_POST['internated'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
                       <br><label for="exampleInputBorderWidth2">¿Fué intervenido quirúrgicamente?:</label>
-                      <input name="surgery" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                      <input name="surgery" type="text" value="<?php echo $_POST ? $_POST['surgery'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
                       <br><label for="exampleInputBorderWidth2">¿Toma alguna medicación?:</label>
-                      <input name="medication" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                      <input name="medication" value="<?php echo $_POST ? $_POST['medication'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                       <br><label for="exampleInputBorderWidth2">¿Tiene vacuna antitetánica?:</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
 
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                        <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" value="<?php echo $_POST ? $_POST['antitetano'] : ''; ?>" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                       </div>
                       <br><label for="exampleInputBorderWidth2">¿Mantiene alguna dieta especial?:</label>
-                      <input name="diet" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                      <input name="diet" type="text" value="<?php echo $_POST ? $_POST['diet'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                       <br><label for="exampleInputBorderWidth2">¿Presenta algún cuadro alérgico?:</label>
-                      <input name="allergy" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-
+                      <input name="allergy" value="<?php echo $_POST ? $_POST['allergy'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                     </div>
-
-
-
                   </div>
                   <div class="card card_style">
                     <h3><b><u>Firmas/Autorizaciones</u></b></h3><br>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox">
-                        <input class="custom-control-input" type="checkbox" id="authorized" name="authorized[]" value="1">
+                        <input class="custom-control-input" type="checkbox" id="authorized" name="authorized" value="1">
                         <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
-
-
                       </div>
                     </div>
                   </div>

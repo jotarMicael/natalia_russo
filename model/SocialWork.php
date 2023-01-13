@@ -6,7 +6,7 @@ class SocialWork
 {
 
     private $conn;
-    private $table_name = "social_work";
+    private $table_name = "social_works";
 
     public function __construct($db)
     {
