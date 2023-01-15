@@ -192,14 +192,14 @@ class Student
             s.tetanus_vaccine,
             s.diet,
             s.allergy,
-            GROUP_CONCAT(d.name) AS diseases,
+            (SELECT GROUP_CONCAT(d.name)  FROM  " . $this->table_name2 . " sd
+            INNER JOIN " . $this->table_name5 . " d ON (sd.disease_id=d.id)
+            WHERE sd.student_id = s.id ) AS diseases,
             (SELECT GROUP_CONCAT(DISTINCT CONCAT(DATE_FORMAT(ss.share_date, '%m/%Y'),':',ss.import,':',DATE_FORMAT(ss.created_at, '%d/%m/%Y'),':',ss.id) ORDER BY ss.share_date DESC SEPARATOR ',') 
              FROM " . $this->table_name4 . "  ss 
              WHERE ss.student_id = s.id) AS shares
              FROM " . $this->table_name . " s 
                 INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id=sw.id)
-                LEFT JOIN " . $this->table_name2 . " sd ON (s.id=sd.student_id)
-                LEFT JOIN " . $this->table_name5 . " d ON (sd.id=d.id)
             WHERE s.id=:id and s.active=1
             GROUP BY s.id
             LIMIT 0,1
@@ -465,6 +465,105 @@ class Student
             return $student;
 
             return array(1, 'Alumno eliminado correctamente');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+    function update_student(&$student)
+    {
+        try {
+
+            $insert = '';
+
+            if (!empty($student['other_diseases_1'])) {
+                $insert .= ',s.other_disease_1=' . $student['other_diseases_1'];
+            }
+
+            if (!empty($student['other_diseases_2'])) {
+                $insert .= ',s.other_disease_2=' . $student['other_diseases_2'];
+            }
+
+            if (!empty($student['internated'])) {
+                $insert .= ',s.internal=' . $student['internated'];
+            }
+
+            if (!empty($student['surgery'])) {
+                $insert .= ',s.surgery=' . $student['surgery'];
+            }
+
+            if (!empty($student['medication'])) {
+                $insert .= ',s.medication=' . $student['medication'];
+            }
+
+            if (!empty($student['antitetano'])) {
+                $antitetano_date = substr($student['antitetano'], 6, 4) . '-' . substr($student['antitetano'], 3, 2) . '-' . substr($student['antitetano'], 0, 2);
+                $insert .= ',s.tetanus_vaccine=' . $antitetano_date;
+            }
+
+            if (!empty($student['diet'])) {
+                $insert .= ',s.diet=' . $student['diet'];
+            }
+
+            if (!empty($student['allergy'])) {
+                $insert .= ',s.allergy=' . $student['allergy'];
+            }
+
+            $query = "DELETE FROM  " . $this->table_name2 . " ss
+            WHERE ss.student_id={$student['id']}
+            ;
+            ";
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            if (!empty($student['had_disease'])) {
+                $had_diseases = [];
+                foreach ($student['had_disease'] as $disease) {
+                    $had_diseases[] = "({$student['id']},$disease)";
+                }
+
+                $query = "INSERT INTO " . $this->table_name2 . " 
+                        (student_id,disease_id)
+                        VALUES
+                        " . implode(",", $had_diseases) . ";
+                ";
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->execute();
+            }
+
+            if (!empty($student['diseases'])) {
+                $diseases = [];
+                foreach ($student['diseases'] as $disease) {
+                    $diseases[] = "({$student['id']},$disease)";
+                }
+
+                $query = "INSERT INTO " . $this->table_name2 . " 
+                        (student_id,disease_id)
+                        VALUES
+                        " . implode(",", $diseases) . ";
+                ";
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->execute();
+            }
+
+            $query = "UPDATE " . $this->table_name . " s
+            SET 
+                s.name={$student['student_name']},s.surname={$student['student_surname']},s.birth_date=" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . ",
+                s.father_name={$student['father_name']},s.mother_name={$student['mother_name']},s.private_phone_number={$student['private_number']},s.emergency_phone_number={$student['emergency_number']},s.address={$student['address']},s.parents_email={$student['parents_email']},s.social_work_id={$student['medical_coverage']},
+                s.afiliate_number={$student['affiliate_number']}" . $insert . "
+            WHERE 
+                s.id={$student['id']}
+            LIMIT 1
+            ";
+
+            return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ha sido actualizado');
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }

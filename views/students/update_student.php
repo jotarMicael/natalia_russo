@@ -13,12 +13,18 @@ require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
 SessionController::mustBeLoggedIn();
 
+require_once ROOTPATH . '/controller/StudentController.php';
+$studentController = new StudentController();
 
-if ($_GET['id']) {
-  require_once ROOTPATH . '/controller/StudentController.php';
-  $studentController = new StudentController();
-  $result = $studentController->get_only_student($_GET['id']);
+
+if ($_POST) {
+  $result = $studentController->update_student($_POST);
 }
+if (!$_GET['id']) {
+  header('Location: ' . BASE_URL . 'views/students/students.php');
+  die();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +96,9 @@ if ($_GET['id']) {
 
                 include ROOTPATH . '/common/alert_danger.php';
               }
-              ?><?php if ($result[0] != 3) { ?>
+              ?><?php if ($result[0] != 3) {
+                  $result = $studentController->get_only_student($_GET['id']);
+                ?>
               <h1>Editar alumno: <strong><?php echo $result['student_name'] . ' ' . $result['student_surname'] . '#' . $result['id']; ?></strong></h1>
             <?php } ?>
             </div>
@@ -335,6 +343,7 @@ if ($_GET['id']) {
                       </div>
                     </div>
                   </div>
+                  <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
                   <div class="card-footer">
                     <button type="submit" class="btn bg-orange">Registrar</button>
                     </form>

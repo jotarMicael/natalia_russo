@@ -79,4 +79,12 @@ class StudentController
 		$student = new Student($db);
 		return $student->get_only_student($student_id);
 	}
+
+	function update_student(&$student_){
+
+		$database = new Database();
+		$db = $database->getConnection();
+		$student = new Student($db);
+		return $student->update_student($student_);
+	}
 }
