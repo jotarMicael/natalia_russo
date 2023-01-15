@@ -63,4 +63,20 @@ class StudentController
 
 		return $student->generate_fee_pdf($share_id);
 	}
+
+	function delete_student(&$student_id)
+	{
+		$database = new Database();
+		$db = $database->getConnection();
+		$student = new Student($db);
+		return $student->delete_student($student_id);
+	}
+
+	function get_only_student(&$student_id)
+	{
+		$database = new Database();
+		$db = $database->getConnection();
+		$student = new Student($db);
+		return $student->get_only_student($student_id);
+	}
 }

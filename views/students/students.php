@@ -15,10 +15,14 @@ SessionController::mustBeLoggedIn();
 
 $nav = 'aa';
 
-if (!empty($_GET['id'])) {
-}
-else{
-  header(BASE_URL.'students.php');
+if (!empty($_POST)) {
+  require_once ROOTPATH . '/controller/StudentController.php';
+  $studentController = new StudentController();
+  if (!empty($_POST['delete_id'])) {
+    $result = $studentController->delete_student($_POST['delete_id']);
+
+  }
+
 }
 ?>
 
@@ -58,6 +62,19 @@ else{
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+              <?php
+              if ($result[0] == 1) {
+                include ROOTPATH . '/common/alert_success.php';
+                unset($_POST);
+              } elseif ($result[0] == 2) {
+
+                include ROOTPATH . '/common/alert_warning.php';
+              } elseif ($result[0] == 3) {
+
+                include ROOTPATH . '/common/alert_danger.php';
+              }
+              unset($result);
+              ?>
               <h1>Todos los alumnos</h1>
             </div>
 
@@ -92,21 +109,21 @@ else{
                       $studentController = new StudentController();
                       foreach ($studentController->get_all_student_actives() as $student) { ?>
                         <tr>
-                          <td><?php echo $student['name'] ?>&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm"  href='<?php echo BASE_URL ?>views/students/view_student.php?id=<?php echo $student["id"] ?>'>
+                          <td><?php echo $student['name'] ?>&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" href='<?php echo BASE_URL ?>views/students/view_student.php?id=<?php echo $student["id"] ?>'>
                               <i class="fas fa-eye"></i>
                               </i>
                             </a></td>
                           <td><?php echo $student['surname'] ?></td>
-                          <td><?php echo $student['birth_date'] ?></td>
+                          <td class="text-right"><?php echo $student['birth_date'] ?></td>
                           <td><?php echo $student['address'] ?></td>
                           <td><?php echo $student['private_phone_number'] ?></td>
                           <td class="project-actions text-center">
-                            <a class="btn btn-info btn-sm" href="#">
-                              <i class="fas fa-pencil-alt">
+                            <a class="btn btn-info btn-sm" href="<?php echo BASE_URL ?>views/students/update_student.php?id=<?php echo $student['id'] ?>">
+                              <i  class="fas fa-pencil-alt">
                               </i>
                               Editar
                             </a>
-                            <a class="btn btn-danger btn-sm" href="#">
+                            <a onclick="send_delete_id('<?php echo $student['id'] ?>');" class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
                               Borrar
@@ -127,16 +144,15 @@ else{
         </div>
         <!-- /.container-fluid -->
       </section>
-      <!-- /.content -->
+      <form id="delete_student" method="post">
+        <input id="delete_id" name="delete_id" type="hidden" id=''>
+      </form>
     </div>
-    <!-- /.content-wrapper -->
+
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+
+
   </div>
   <!-- ./wrapper -->
 
@@ -161,7 +177,12 @@ else{
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
 
   <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
- 
+  <script>
+    function send_delete_id(id) {
+      $('#delete_id').val(id);
+      $('#delete_student').submit();
+    }
+  </script>
 </body>
 
 </html>

@@ -410,4 +410,63 @@ class Student
 
         return true;
     }
+
+    public function delete_student(&$student_id)
+    {
+
+
+        try {
+            $query = " UPDATE
+            " . $this->table_name . " s 
+            SET s.active=0
+            WHERE s.id=:student_id
+            LIMIT 1
+                ";
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':student_id', $student_id);
+
+            $stmt->execute();
+
+            return array(1, 'Alumno eliminado correctamente');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+    public function get_only_student(&$student_id)
+    {
+
+        try {
+            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS parents_email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number, s.authorized as authorized,
+            GROUP_CONCAT(sd.disease_id) AS diseases 
+            FROM " . $this->table_name . " s 
+            INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
+            LEFT JOIN " . $this->table_name2 . " sd ON (s.id=sd.student_id)
+            WHERE s.active=1 and s.id=:student_id 
+            LIMIT 1
+                ";
+
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':student_id', $student_id);
+
+            $stmt->execute();
+
+            $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (empty($student)) {
+                throw new Exception();
+            }
+            return $student;
+
+            return array(1, 'Alumno eliminado correctamente');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
 }

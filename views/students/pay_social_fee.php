@@ -170,9 +170,9 @@ if (!empty($_POST)) {
                         foreach (explode(",", $student['shares']) as $share) {
                           $share = explode(":", $share); ?>
                           <tr>
-                            <td><?php echo $share[0]; ?></td>
-                            <td><?php echo '$' . $share[1]; ?></td>
-                            <td><?php echo $share[2]; ?></td>
+                            <td class="text-right"><?php echo $share[0]; ?></td>
+                            <td class="text-right"><?php echo '$' . $share[1]; ?></td>
+                            <td class="text-right"><?php echo $share[2]; ?></td>
                             <td class="text-center"><a onclick="send_share_id('<?php echo $share[3] ?>');" type="button" class="btn btn-default bg-danger ">
                                 <i class="fas fa-file-pdf"></i>
                               </a></td>

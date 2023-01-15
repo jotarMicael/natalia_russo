@@ -11,8 +11,14 @@ require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
 SessionController::mustBeLoggedIn();
 
-
-if (!empty($_GET)) {
+if (!empty($_POST)) {
+    require_once ROOTPATH . '/controller/StudentController.php';
+    $studentController = new StudentController();
+    if (!empty($_POST['share_id'])) {
+        $studentController->generate_fee_pdf($_POST['share_id']);
+        die;
+    } 
+} elseif (!empty($_GET)) {
     require_once ROOTPATH . '/controller/StudentController.php';
     $studentController = new StudentController();
     $student = $studentController->get_information_student($_GET['id']);
@@ -124,9 +130,9 @@ if (!empty($_GET)) {
                                                         foreach (explode(",", $student['shares']) as $share) {
                                                             $share = explode(":", $share); ?>
                                                             <tr>
-                                                                <td><?php echo $share[0]; ?></td>
-                                                                <td><?php echo '$' . $share[1]; ?></td>
-                                                                <td><?php echo $share[2]; ?></td>
+                                                                <td class="text-right"><?php echo $share[0]; ?></td>
+                                                                <td class="text-right"><?php echo '$' . $share[1]; ?></td>
+                                                                <td class="text-right"><?php echo $share[2]; ?></td>
                                                                 <td class="text-center"><a onclick="send_share_id('<?php echo $share[3] ?>');" type="button" class="btn btn-default bg-danger ">
                                                                         <i class="fas fa-file-pdf"></i>
                                                                     </a></td>
@@ -158,6 +164,9 @@ if (!empty($_GET)) {
 
                 </div>
             </section>
+            <form id="pdf" method="post">
+                <input id="share_id" name="share_id" type="hidden" id=''>
+            </form>
 
         </div>
 
@@ -185,6 +194,12 @@ if (!empty($_GET)) {
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
+    <script>
+        function send_share_id(id) {
+            $('#share_id').val(id);
+            $('#pdf').submit();
+        }
+    </script>
 </body>
 
 
