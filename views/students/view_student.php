@@ -92,44 +92,63 @@ if (!empty($_GET)) {
                                     <strong><i class="far fa-file-alt mr-1"></i> Historia clínica</strong>
                                     <p><span>¿Fué internado?: </span><span class="text-danger"><?php echo empty($student['internal']) ? 'No' : $student['internal'] ?></span>&nbsp;&nbsp;-¿Fué intervenido quirúrgicamente?: <span class="text-danger"><?php echo empty($student['surgery']) ? 'No' : $student['surgery'] ?></span>&nbsp;&nbsp;-¿Toma medicación?: <span class="text-danger"><?php echo empty($student['medication']) ? 'No' : $student['medication'] ?></span>&nbsp;&nbsp;-¿Vacuna del tétano?: <span class="text-danger"><?php echo empty($student['tetanus_vaccine']) ? 'No' : 'Fecha: ' . $student['tetanus_vaccine'] ?></span>&nbsp;&nbsp;-¿Tiene alergias?: <span class="text-danger"><?php echo empty($student['allergy']) ? 'No' : $student['allergy'] ?></span>&nbsp;&nbsp;-¿Hace alguna dieta?: <span class="text-danger"><?php echo empty($student['diet']) ? 'No' : $student['diet'] ?></span></p>
                                     <hr>
-                                    <strong><i class="fas fa-money-check-alt mr-1"></i> Cuotas abonadas</strong>
+                                    <div class="container">
+                                        <div class="row justify-content-between">
+                                            <div class="col-6">
+                                                <strong><i class="fas fa-money-check-alt mr-1"></i> Cuotas abonadas</strong>
+                                            </div>
+                                            <div class="col-2">
+                                                <a type="button" href="<?php echo BASE_URL; ?>views/students/pay_social_fee.php?id=<?php echo $student['id'] ?>" class="btn btn-block btn-success"><i class="fas fa-money-check-alt mr-1"></i>Abonar cuota</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <br>
                                     <div class="card">
 
                                         <!-- /.card-header -->
                                         <div class="card-body">
-                                            <table id="example1" class="table table-bordered table-striped table-hover table-sm">
-                                                <thead>
-                                                    <tr>
-
-                                                        <th>Fecha cuota</th>
-                                                        <th>Importe abonado</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $shares = explode(",", $student['shares']);
-                                                    foreach (explode(",", $student['shares']) as $share) {
-                                                        $share = explode(":", $share); ?>
+                                            <?php if (!empty($student['shares'])) { ?>
+                                                <table id="example1" class="table table-bordered table-striped table-hover table-sm">
+                                                    <thead>
                                                         <tr>
-                                                            <td><?php echo $share[0]; ?></td>
-                                                            <td><?php echo '$'.$share[1]; ?></td>
 
-
+                                                            <th>Fecha cuota</th>
+                                                            <th>Importe abonado</th>
+                                                            <th>Fecha pago</th>
+                                                            <th>Descargar recibo</th>
                                                         </tr>
-                                                    <?php } ?>
-                                                </tbody>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $shares = explode(",", $student['shares']);
+                                                        foreach (explode(",", $student['shares']) as $share) {
+                                                            $share = explode(":", $share); ?>
+                                                            <tr>
+                                                                <td><?php echo $share[0]; ?></td>
+                                                                <td><?php echo '$' . $share[1]; ?></td>
+                                                                <td><?php echo $share[2]; ?></td>
+                                                                <td class="text-center"><a onclick="send_share_id('<?php echo $share[3] ?>');" type="button" class="btn btn-default bg-danger ">
+                                                                        <i class="fas fa-file-pdf"></i>
+                                                                    </a></td>
 
-                                            </table>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+
+                                                </table>
+                                            <?php } else { ?>
+                                                <span class="text-danger">No posee ninguna cuota abonada</span>
+                                            <?php } ?>
                                         </div>
                                         <!-- /.card-body -->
                                     </div>
-                                   
+
                                     <div class="col-2"><a type="button" href="<?php echo BASE_URL; ?>views/students/students.php" class="btn btn-block bg-maroon btn-sm"><i class="fas fa-arrow-left"></i>Volver</a></div>
                                 </div>
-                                
+
 
                             </div>
-                           
+
 
                         </div>
 
@@ -165,9 +184,9 @@ if (!empty($_GET)) {
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
+    <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
 </body>
 
-<script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
+
 
 </html>

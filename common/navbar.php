@@ -184,6 +184,21 @@
 
           </ul>
         </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active bg-maroon">
+            <i class="nav-icon fas fa-users"></i>
+            <p> Profesores <i class=" fas fa-angle-left right"></i></p>
+          </a>
+
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ct')) ? 'block' : 'none'; ?>;">
+            <li class="nav-item">
+              <a href="<?php echo BASE_URL; ?>views/teachers/create_teacher.php" class="nav-link <?php echo $nav == 'ct' ? 'bg-orange' : ''; ?>">
+                <i class="nav-icon fas fa-user"></i>
+                <p>Alta de profesor</p>
+              </a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </nav>
   </div>

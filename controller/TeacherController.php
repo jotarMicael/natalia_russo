@@ -1,22 +1,22 @@
 <?php
 
-require_once ROOTPATH . '/model/Student.php';
+require_once ROOTPATH . '/model/Teacher.php';
 require_once ROOTPATH . '/db/Database.php';
 
-class StudentController
+class TeacherController
 {
 
-	function insert_student(&$student_)
+	function insert_teacher(&$teacher_)
 	{
 
 
 		$database = new Database();
 		$db = $database->getConnection();
 
-		$student = new Student($db);
+		$teacher = new Teacher($db);
 
 
-		return $student->insert_student($student_);
+		return $teacher->insert_teacher($teacher_);
 	}
 
 	function get_all_student_actives()
