@@ -127,6 +127,6 @@
   </script>
   <div class="sidebar-custom">
     
-    <a href="<?php echo BASE_URL; ?>views/logout.php" class="btn btn-secondary btn-danger hide-on-collapse pos-right"><i class="nav-icon fas fa-sign-out-alt"></i>Salir</a>
+    <a onclick="return confirm('<?php echo BASE_URL; ?>views/logout.php',true);" class="btn btn-secondary btn-danger hide-on-collapse pos-right"><i class="nav-icon fas fa-sign-out-alt"></i>Salir</a>
   </div>
 </aside>

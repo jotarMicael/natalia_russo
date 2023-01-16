@@ -273,6 +273,7 @@ if (!$_GET['id']) {
                                 $diseases = $diseaseController->get_diseases(1);
 
                                 foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
+
                                 ?>
                                   <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input" type="checkbox" <?= in_array($disease['id'], $actual_diseases) ? ' checked="checked"' : '' ?> name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
@@ -288,7 +289,7 @@ if (!$_GET['id']) {
                                 foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
                                 ?>
                                   <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                    <input class="custom-control-input" type="checkbox" name="diseases[]" <?= in_array($disease['id'], $actual_diseases) ? ' checked="checked"' : '' ?>  id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
                                     <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
                                   </div>
 

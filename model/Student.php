@@ -538,6 +538,7 @@ class Student
 
             $stmt->execute();
 
+
             if (!empty($student['had_disease'])) {
                 $had_diseases = [];
                 foreach ($student['had_disease'] as $disease) {
@@ -566,6 +567,8 @@ class Student
                         VALUES
                         " . implode(",", $diseases) . ";
                 ";
+
+             
 
                 $stmt = $this->conn->prepare($query);
 
