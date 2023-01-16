@@ -20,9 +20,7 @@ if (!empty($_POST)) {
   $studentController = new StudentController();
   if (!empty($_POST['delete_id'])) {
     $result = $studentController->delete_student($_POST['delete_id']);
-
   }
-
 }
 ?>
 
@@ -88,8 +86,8 @@ if (!empty($_POST)) {
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Datos personales</h3>
+                <div class="card-header bg-lime">
+                  <h3 class="card-title"><strong>Datos personales</strong></h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -118,12 +116,12 @@ if (!empty($_POST)) {
                           <td><?php echo $student['address'] ?></td>
                           <td><?php echo $student['private_phone_number'] ?></td>
                           <td class="project-actions text-center">
-                            <a class="btn btn-info btn-sm" href="<?php echo BASE_URL ?>views/students/update_student.php?id=<?php echo $student['id'] ?>">
-                              <i  class="fas fa-pencil-alt">
+                            <a onclick="return confirm('<?php echo BASE_URL ?>views/students/update_student.php?id=<?php echo $student['id'] ?>',true);" class="btn btn-info btn-sm">
+                              <i class="fas fa-pencil-alt">
                               </i>
                               Editar
                             </a>
-                            <a onclick="send_delete_id('<?php echo $student['id'] ?>');" class="btn btn-danger btn-sm" href="#">
+                            <a onclick="return send_delete_id('<?php echo $student['id'] ?>');" class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
                               Borrar
@@ -175,12 +173,13 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
-
+  <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
   <script>
     function send_delete_id(id) {
       $('#delete_id').val(id);
-      $('#delete_student').submit();
+      return confirm('#delete_student',false);
     }
   </script>
 </body>

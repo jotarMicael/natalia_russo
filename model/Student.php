@@ -470,6 +470,25 @@ class Student
         }
     }
 
+    function get_students_birthdate()
+    {
+        try {
+            $query = " SELECT s.id as id, s.name as name, s.surname as surname, DATE_FORMAT(s.birth_date,'%m/%d') as birth_date
+            FROM " . $this->table_name . " s 
+            WHERE s.active=1 AND DAY(s.birth_date)<=DAY(DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)) AND DAY(s.birth_date)>=DAY(NOW()) 
+            AND MONTH(s.birth_date)=MONTH(CURRENT_DATE())
+            ORDER BY s.birth_date DESC ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
     function update_student(&$student)
     {
         try {
@@ -555,13 +574,17 @@ class Student
 
             $query = "UPDATE " . $this->table_name . " s
             SET 
-                s.name={$student['student_name']},s.surname={$student['student_surname']},s.birth_date=" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . ",
-                s.father_name={$student['father_name']},s.mother_name={$student['mother_name']},s.private_phone_number={$student['private_number']},s.emergency_phone_number={$student['emergency_number']},s.address={$student['address']},s.parents_email={$student['parents_email']},s.social_work_id={$student['medical_coverage']},
-                s.afiliate_number={$student['affiliate_number']}" . $insert . "
+                s.name='{$student['student_name']}',s.surname='{$student['student_surname']}',s.birth_date='" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "',
+                s.father_name='{$student['father_name']}',s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.address='{$student['address']}',s.parents_email='{$student['parents_email']}',s.social_work_id={$student['medical_coverage']},
+                s.afiliate_number='{$student['affiliate_number']}'" . $insert . "
             WHERE 
                 s.id={$student['id']}
             LIMIT 1
             ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
 
             return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ha sido actualizado');
         } catch (Exception) {

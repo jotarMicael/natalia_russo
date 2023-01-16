@@ -87,4 +87,11 @@ class StudentController
 		$student = new Student($db);
 		return $student->update_student($student_);
 	}
+
+	function get_students_birthdate(){
+		$database = new Database();
+		$db = $database->getConnection();
+		$student = new Student($db);
+		return $student->get_students_birthdate();
+	}
 }

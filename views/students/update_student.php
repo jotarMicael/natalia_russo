@@ -62,7 +62,7 @@ if (!$_GET['id']) {
   <!-- dropzonejs -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
-
+  <script src="<?php echo BASE_URL; ?>/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -121,7 +121,7 @@ if (!$_GET['id']) {
                     <div class="container">
                       <div class="row justify-content-around">
                         <div class="col-4">
-                          <form method="post" href="#">
+                          <form id="update_student" method="post" href="#">
                             <div class="form-group">
                               <label for="exampleInputBorderWidth2">Nombre</label>
                               <input required name="student_name" type="text" value="<?php echo $result['student_name']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
@@ -174,7 +174,7 @@ if (!$_GET['id']) {
                             </div>
                             <div class="form-group">
                               <label for="exampleInputBorderWidth2">Email de padres</label>
-                              <input required name="email" type="text" value="<?php echo $result['parents_email']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                              <input required name="parents_email" type="text" value="<?php echo $result['parents_email']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                             </div>
                           </div>
                         </div>
@@ -345,8 +345,9 @@ if (!$_GET['id']) {
                   </div>
                   <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
                   <div class="card-footer">
-                    <button type="submit" class="btn bg-orange">Registrar</button>
+
                     </form>
+                    <button onclick="return update_student();" type="button" class="btn bg-orange"><i class="fas fa-user-edit"></i> Actualizar datos</button>
                   </div>
                 </div>
               </div>
@@ -379,11 +380,7 @@ if (!$_GET['id']) {
   <!-- AdminLTE App -->
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
 
-  <script>
-    $(function() {
-      bsCustomFileInput.init();
-    });
-  </script>
+
   <script src="<?php echo BASE_URL; ?>/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo BASE_URL; ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -406,10 +403,18 @@ if (!$_GET['id']) {
   <script src="<?php echo BASE_URL; ?>/plugins/dropzone/min/dropzone.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
 
   <!-- Page specific script -->
   <script>
+    function update_student() {
+
+      return confirm('#update_student', false);
+    }
     $(function() {
+
+
       //Initialize Select2 Elements
       $('.select2').select2()
 
@@ -429,122 +434,7 @@ if (!$_GET['id']) {
       //Money Euro
       $('[data-mask]').inputmask()
 
-      //Date picker
-      $('#reservationdate').datetimepicker({
-        format: 'L'
-      });
-
-      //Date and time picker
-      $('#reservationdatetime').datetimepicker({
-        icons: {
-          time: 'far fa-clock'
-        }
-      });
-
-      //Date range picker
-      $('#reservation').daterangepicker()
-      //Date range picker with time picker
-      $('#reservationtime').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-          format: 'MM/DD/YYYY hh:mm A'
-        }
-      })
-      //Date range as a button
-      $('#daterange-btn').daterangepicker({
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          startDate: moment().subtract(29, 'days'),
-          endDate: moment()
-        },
-        function(start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-        }
-      )
-
-      //Timepicker
-      $('#timepicker').datetimepicker({
-        format: 'LT'
-      })
-
-      //Bootstrap Duallistbox
-      $('.duallistbox').bootstrapDualListbox()
-
-      //Colorpicker
-      $('.my-colorpicker1').colorpicker()
-      //color picker with addon
-      $('.my-colorpicker2').colorpicker()
-
-      $('.my-colorpicker2').on('colorpickerChange', function(event) {
-        $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-      })
     })
-    // BS-Stepper Init
-    document.addEventListener('DOMContentLoaded', function() {
-      window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-    })
-
-    // DropzoneJS Demo Code Start
-    Dropzone.autoDiscover = false
-
-    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-    var previewNode = document.querySelector("#template")
-    previewNode.id = ""
-    var previewTemplate = previewNode.parentNode.innerHTML
-    previewNode.parentNode.removeChild(previewNode)
-
-    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-      url: "/target-url", // Set the url
-      thumbnailWidth: 80,
-      thumbnailHeight: 80,
-      parallelUploads: 20,
-      previewTemplate: previewTemplate,
-      autoQueue: false, // Make sure the files aren't queued until manually added
-      previewsContainer: "#previews", // Define the container to display the previews
-      clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-    })
-
-    myDropzone.on("addedfile", function(file) {
-      // Hookup the start button
-      file.previewElement.querySelector(".start").onclick = function() {
-        myDropzone.enqueueFile(file)
-      }
-    })
-
-    // Update the total progress bar
-    myDropzone.on("totaluploadprogress", function(progress) {
-      document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-    })
-
-    myDropzone.on("sending", function(file) {
-      // Show the total progress bar when upload starts
-      document.querySelector("#total-progress").style.opacity = "1"
-      // And disable the start button
-      file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
-    })
-
-    // Hide the total progress bar when nothing's uploading anymore
-    myDropzone.on("queuecomplete", function(progress) {
-      document.querySelector("#total-progress").style.opacity = "0"
-    })
-
-    // Setup the buttons for all transfers
-    // The "add files" button doesn't need to be setup because the config
-    // `clickable` has already been specified.
-    document.querySelector("#actions .start").onclick = function() {
-      myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
-    }
-    document.querySelector("#actions .cancel").onclick = function() {
-      myDropzone.removeAllFiles(true)
-    }
-    // DropzoneJS Demo Code End
   </script>
 </body>
 

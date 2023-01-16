@@ -2,17 +2,18 @@
 
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      <!--<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a> -->
+      <a class="nav-link" data-widget="pushmenu" href="#" role="button"></a>
     </li>
 
   </ul>
 
-  
+
 </nav>
 <!-- /.navbar -->
 
 
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar  main-sidebar-custom sidebar-dark-primary elevation-4">
   <a href="#" class="brand-link">
     <img src="<?php echo BASE_URL; ?>/dist/img/dance.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light" style="color: #d81b60;"><b><?php echo substr(SYSTEM_NAME, 0, 7); ?></b><?php echo substr(SYSTEM_NAME, 7); ?></span>
@@ -46,7 +47,7 @@
             <p> Alumnos <i class=" fas fa-angle-left right"></i></p>
           </a>
 
-          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce','aa')) ? 'block' : 'none'; ?>;">
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce', 'aa')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/students/create_student.php" class="nav-link <?php echo $nav == 'ce' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
@@ -77,9 +78,18 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo BASE_URL; ?>views/services/services.php" class="nav-link <?php echo $nav == 's' ? 'bg-orange' : ''; ?>" class="nav-link">
+            <i class="nav-icon fas fa-tools"></i>
+            <p>
+              Servicios
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // make it as accordion for smaller screens
@@ -115,4 +125,8 @@
       // end if innerWidth
     });
   </script>
+  <div class="sidebar-custom">
+    
+    <a href="<?php echo BASE_URL; ?>views/logout.php" class="btn btn-secondary btn-danger hide-on-collapse pos-right"><i class="nav-icon fas fa-sign-out-alt"></i>Salir</a>
+  </div>
 </aside>

@@ -57,7 +57,7 @@ if (!empty($_POST)) {
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
-
+  <script src="<?php echo BASE_URL; ?>/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -100,7 +100,7 @@ if (!empty($_POST)) {
                     <div class="container">
                       <div class="row justify-content-around">
                         <div class="col-6">
-                          <form method="post" href="#">
+                          <form id="pay_social_fee" method="post" href="#">
                             <div class="form-group">
                               <label>Fecha</label>
                               <div class="input-group">
@@ -128,8 +128,9 @@ if (!empty($_POST)) {
                     </div>
                   </div>
                   <div class="card-footer">
-                    <button type="submit" class="btn bg-success"><i class="fas fa-money-check-alt mr-1"></i>Abonar</button>
+                   
                     </form>
+                    <button onclick="return share_pay();" type="submit" class="btn bg-success"><i class="fas fa-money-check-alt mr-1"></i>Abonar</button>
                   </div>
                 </div>
               </div>
@@ -255,13 +256,22 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/moment/moment.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/inputmask/jquery.inputmask.min.js"></script>
   <!-- date-range-picker -->
+  <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.js"></script>
 
   <!-- Page specific script -->
   <script>
+     function share_pay() {
+
+      return confirm('#pay_social_fee',false);
+
+    }
     function send_share_id(id) {
       $('#share_id').val(id);
       $('#pdf').submit();
+   
+
     }
     $(function() {
       //Initialize Select2 Elements
