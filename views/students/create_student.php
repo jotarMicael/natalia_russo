@@ -16,6 +16,7 @@ SessionController::mustBeLoggedIn();
 $nav = 'ce';
 
 if (!empty($_POST)) {
+ 
   require_once ROOTPATH . '/controller/StudentController.php';
   $studentController = new StudentController();
   $result = $studentController->insert_student($_POST);
@@ -88,7 +89,7 @@ if (!empty($_POST)) {
 
           include ROOTPATH . '/common/alert_danger.php';
         }
-        unset($result);
+        
         ?>
 
       </div>
@@ -98,7 +99,6 @@ if (!empty($_POST)) {
         <div class="container-fluid">
           <div class="row">
             <div class="col">
-
               <div class="card card-lime">
                 <div class="card-header">
                   <h3 class="card-title"><strong>Datos generales</strong></h3>
@@ -107,7 +107,7 @@ if (!empty($_POST)) {
                   <div class="container">
                     <div class="row justify-content-around">
                       <div class="col-4">
-                        <form method="post" action="#">
+                        <form id="create_student" method="post" action="#">
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">Nombre</label>
                             <input required name="student_name" type="text" value="<?php echo $_POST ? $_POST['student_name'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
@@ -124,7 +124,7 @@ if (!empty($_POST)) {
                               $social_work = new SocialWorkController();
                               foreach ($social_work->get_social_works() as $sw) {
                               ?>
-                                <option <?php ($_POST['medical_coverage'] == $sw['id']) ? 'selected' : ''; ?> value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
+                                <option <?= $_POST['medical_coverage'] == $sw['id'] ? ' selected="selected"' : ''; ?> value="<?php echo $sw['id'] ?>"><?php echo $sw['name'] ?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -189,17 +189,20 @@ if (!empty($_POST)) {
                             <input required name="emergency_number" value="<?php echo $_POST ? $_POST['emergency_number'] : ''; ?>" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
                           </div>
                         </div>
-
-
-
                         <div class="form-group">
                           <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="authorized" name="authorized" value="1">
+                            <input class="custom-control-input" type="checkbox" <?php echo $_POST['authorized'] ? 'checked' : ''; ?> id="authorized" name="authorized" value="1">
                             <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <?php
+                    if ($result[0] == 4) {
+
+                      echo $result[1];
+                      unset($result);
+                    }  ?>
                   </div>
                 </div>
               </div>
@@ -329,9 +332,9 @@ if (!empty($_POST)) {
                   </div>
                 </div>
                 <div class="card-footer">
-                  <input value="Registrar" type="submit" class="btn bg-orange">
-                  </form>
 
+                  </form>
+                  <button onclick="return create_student();" type="submit" class="btn bg-orange"><i class="fas fa-user"></i> Registrar</button>
                 </div>
               </div>
             </div>
@@ -393,6 +396,11 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
 
   <script>
+    function create_student() {
+
+      return confirm('#create_student', false);
+
+    }
     $(function() {
       //Initialize Select2 Elements
       $('.select2').select2()

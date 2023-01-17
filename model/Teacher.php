@@ -7,7 +7,7 @@ class Teacher
 
     private $conn;
     private $table_name = "teachers";
-    
+
 
     public function __construct($db = null)
     {
@@ -20,7 +20,7 @@ class Teacher
 
     function insert_teacher(&$teacher)
     {
-       // try {
+        try {
             $query = " SELECT t.id FROM " . $this->table_name . " t
             WHERE
                 t.dni = :dni
@@ -56,8 +56,28 @@ class Teacher
             $stmt->execute();
 
             return array(1, '<strong>' .  $teacher['name'] . ' ' . $teacher['surname'] . '</strong> dado de alta');
-      //  } catch (Exception) {
+        } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
-       // }
+        }
+    }
+
+    function get_all_teachers()
+    {
+        $query = "SELECT t.id,
+            t.name,
+            t.surname,
+            t.dni,
+            t.address,
+            t.private_phone_number,
+            t.email,
+            t.birth_date,
+            t.created_at
+        FROM ".$this->table_name." t";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

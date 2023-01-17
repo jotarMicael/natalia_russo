@@ -18,6 +18,7 @@ $studentController = new StudentController();
 
 
 if ($_POST) {
+
   $result = $studentController->update_student($_POST);
 }
 if (!$_GET['id']) {
@@ -96,7 +97,10 @@ if (!$_GET['id']) {
 
                 include ROOTPATH . '/common/alert_danger.php';
               }
-              ?><?php if ($result[0] != 3) {
+              ?><?php if ($result[0] != 3)  {
+                  if ($result[0] ==4){
+                    $error=$result[1];
+                  }
                   $result = $studentController->get_only_student($_GET['id']);
                 ?>
               <h1>Editar alumno: <strong><?php echo $result['student_name'] . ' ' . $result['student_surname'] . '#' . $result['id']; ?></strong></h1>
@@ -213,7 +217,13 @@ if (!$_GET['id']) {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div><?php
+                            if ($error) {
+
+                              echo $error;
+                              unset($error);
+                              
+                            }  ?>
                     </div>
                   </div>
                 </div>
@@ -262,7 +272,7 @@ if (!$_GET['id']) {
                           </div>
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                            <input name="other_diseases_1" value="<?php echo $_POST ? $_POST['other_diseases_1'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                            <input name="other_diseases_1" value="<?= $result['other_diseases_1']; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
                           <div class="form-group">
 
@@ -289,7 +299,7 @@ if (!$_GET['id']) {
                                 foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
                                 ?>
                                   <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" name="diseases[]" <?= in_array($disease['id'], $actual_diseases) ? ' checked="checked"' : '' ?>  id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
+                                    <input class="custom-control-input" type="checkbox" name="diseases[]" <?= in_array($disease['id'], $actual_diseases) ? ' checked="checked"' : '' ?> id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
                                     <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
                                   </div>
 
@@ -303,7 +313,7 @@ if (!$_GET['id']) {
                           </div>
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                            <input name="other_diseases_2" value="<?php echo $_POST ? $_POST['other_diseases_2'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                            <input name="other_diseases_2" value="<?= $result['other_diseases_2']; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
                         </div>
                         <div class="col-4">
@@ -314,22 +324,22 @@ if (!$_GET['id']) {
 
                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                               </div>
-                              <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" value="<?php echo $_POST ? $_POST['antitetano'] : ''; ?>" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                              <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" value="<?= $result['antitetano']; ?>" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                             </div>
                           </div>
                           <div class="form-group"><label for="exampleInputBorderWidth2">¿Presenta algún cuadro alérgico?:</label>
-                            <input name="allergy" value="<?php echo $_POST ? $_POST['allergy'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                            <input name="allergy" value="<?= $result['allergy']; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                           </div>
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">¿Fué intervenido quirúrgicamente?:</label>
-                            <input name="surgery" type="text" value="<?php echo $_POST ? $_POST['surgery'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                            <input name="surgery" type="text" value="<?= $result['surgery']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
                           </div>
                           <div class="form-group"><label for="exampleInputBorderWidth2">¿Mantiene alguna dieta especial?:</label>
-                            <input name="diet" type="text" value="<?php echo $_POST ? $_POST['diet'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                            <input name="diet" type="text" value="<?= $result['diet']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                           </div>
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">¿Estuvo alguna vez internado?:</label>
-                            <input name="internated" value="<?php echo $_POST ? $_POST['internated'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
+                            <input name="internated" value="<?= $result['internated']; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
                             <!-- /.input group -->
                           </div>
                         </div>
@@ -337,7 +347,7 @@ if (!$_GET['id']) {
 
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">¿Toma alguna medicación?:</label>
-                            <input name="medication" value="<?php echo $_POST ? $_POST['medication'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
+                            <input name="medication" value="<?= $result['medication']; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
                           </div>
 
                         </div>

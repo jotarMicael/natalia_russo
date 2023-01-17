@@ -19,48 +19,17 @@ class TeacherController
 		return $teacher->insert_teacher($teacher_);
 	}
 
-	function get_all_student_actives()
-	{
-
+	function get_all_teachers(){
 
 		$database = new Database();
 		$db = $database->getConnection();
 
-		$student = new Student($db);
+		$teacher = new Teacher($db);
 
 
-		return $student->get_all_student_actives();
+		return $teacher->get_all_teachers();
+
 	}
 
-	function get_information_student(&$student_id)
-	{
-		$database = new Database();
-		$db = $database->getConnection();
 
-		$student = new Student($db);
-
-
-		return $student->get_information_student($student_id);
-	}
-
-	function pay_social_fee(&$student_id, $share_date, &$import)
-	{
-
-		$database = new Database();
-		$db = $database->getConnection();
-
-		$student = new Student($db);
-
-
-		return $student->pay_social_fee($student_id, $share_date, $import);
-	}
-
-	function generate_fee_pdf(&$share_id)
-	{
-		$database = new Database();
-		$db = $database->getConnection();
-		$student = new Student($db);
-
-		return $student->generate_fee_pdf($share_id);
-	}
 }

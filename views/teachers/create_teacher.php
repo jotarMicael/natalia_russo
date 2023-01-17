@@ -15,10 +15,12 @@ SessionController::mustBeLoggedIn();
 
 $nav = 'ct';
 
+require_once ROOTPATH . '/controller/TeacherController.php';
+$teacherController = new TeacherController();
+
 if (!empty($_POST)) {
 
-  require_once ROOTPATH . '/controller/TeacherController.php';
-  $teacherController = new TeacherController();
+
   $result = $teacherController->insert_teacher($_POST);
 }
 ?>
@@ -33,32 +35,17 @@ if (!empty($_POST)) {
   <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
 
 
-  <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
+
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/dist/css/cards.css">
+
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/dist/css/adminlte.min.css?v=3.2.0">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-  <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
-  <!-- BS Stepper -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/bs-stepper/css/bs-stepper.min.css">
-  <!-- dropzonejs -->
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/dropzone/min/dropzone.min.css">
-  <!-- Theme style -->
-
+  <script src="<?php echo BASE_URL; ?>/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -96,7 +83,7 @@ if (!empty($_POST)) {
       <div class="content">
         <div class="container-fluid">
           <div class="row">
-            <div class="col">
+            <div class="col-12">
 
               <div class="card card-lime">
                 <div class="card-header">
@@ -149,7 +136,7 @@ if (!empty($_POST)) {
                       <div class="col-4">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Dirección</label>
-                          <input required type="text" class="form-control" id="address" name="address"  value="<?php echo $_POST ? $_POST['address'] : ''; ?>"  placeholder="Ingrese una dirección">
+                          <input required type="text" class="form-control" id="address" name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" placeholder="Ingrese una dirección">
                         </div>
                       </div>
                     </div>
@@ -161,6 +148,49 @@ if (!empty($_POST)) {
                 </div>
               </div>
             </div>
+            <div class="col-12">
+              <div class="card card-lime">
+                <div class="card-header bg-lime">
+                  <h3 class="card-title"><strong>Profesores</strong> </span></h3>
+                </div>
+
+                <div class="card-body">
+                  <table id="example1" class="table table-bordered table-striped table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Nombre completo</th>
+                        <th class="text-center">Dni</th>
+                        <th class="text-center">Dirección</th>
+                        <th class="text-center">Núm.Tel.</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Fecha Nac.</th>
+                        <th class="text-center">Fecha alta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                      foreach ($teacherController->get_all_teachers()  as $teacher) { ?>
+                        <tr>
+                          <td class="text-center"><?= $teacher['id'] ?></td>
+                          <td class="text-center"><?= $teacher['name'] . ' ' .  $teacher['surname'] ?></td>
+                          <td class="text-center"><?= $teacher['dni'] ?> </td>
+                          <td class="text-center"><?= $teacher['address'] ?> </td>
+                          <td class="text-center"><?= $teacher['private_phone_number'] ?> </td>
+                          <td class="text-center"><?= $teacher['email'] ?> </td>
+                          <td class="text-center"><?= $teacher['birth_date'] ?> </td>
+                          <td class="text-center"><?= $teacher['created_at'] ?> </td>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
+
+
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>
@@ -170,16 +200,9 @@ if (!empty($_POST)) {
 
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
 
-  <!-- jQuery -->
   <script src="<?php echo BASE_URL; ?>/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo BASE_URL; ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -187,16 +210,7 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
-
-  <!-- Page specific script -->
-  <script>
-    $(function() {
-      bsCustomFileInput.init();
-    });
-  </script>
-  <script src="<?php echo BASE_URL; ?>/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
-  <script src="<?php echo BASE_URL; ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Select2 -->
   <script src="<?php echo BASE_URL; ?>/plugins/select2/js/select2.full.min.js"></script>
   <!-- Bootstrap4 Duallistbox -->
@@ -215,9 +229,24 @@ if (!empty($_POST)) {
   <!-- dropzonejs -->
   <script src="<?php echo BASE_URL; ?>/plugins/dropzone/min/dropzone.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
 
-  <!-- Page specific script -->
+
+
+
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/jszip/jszip.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
+
   <script>
     $(function() {
       //Initialize Select2 Elements
@@ -239,122 +268,7 @@ if (!empty($_POST)) {
       //Money Euro
       $('[data-mask]').inputmask()
 
-      //Date picker
-      $('#reservationdate').datetimepicker({
-        format: 'L'
-      });
-
-      //Date and time picker
-      $('#reservationdatetime').datetimepicker({
-        icons: {
-          time: 'far fa-clock'
-        }
-      });
-
-      //Date range picker
-      $('#reservation').daterangepicker()
-      //Date range picker with time picker
-      $('#reservationtime').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-          format: 'MM/DD/YYYY hh:mm A'
-        }
-      })
-      //Date range as a button
-      $('#daterange-btn').daterangepicker({
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          startDate: moment().subtract(29, 'days'),
-          endDate: moment()
-        },
-        function(start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-        }
-      )
-
-      //Timepicker
-      $('#timepicker').datetimepicker({
-        format: 'LT'
-      })
-
-      //Bootstrap Duallistbox
-      $('.duallistbox').bootstrapDualListbox()
-
-      //Colorpicker
-      $('.my-colorpicker1').colorpicker()
-      //color picker with addon
-      $('.my-colorpicker2').colorpicker()
-
-      $('.my-colorpicker2').on('colorpickerChange', function(event) {
-        $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-      })
     })
-    // BS-Stepper Init
-    document.addEventListener('DOMContentLoaded', function() {
-      window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-    })
-
-    // DropzoneJS Demo Code Start
-    Dropzone.autoDiscover = false
-
-    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-    var previewNode = document.querySelector("#template")
-    previewNode.id = ""
-    var previewTemplate = previewNode.parentNode.innerHTML
-    previewNode.parentNode.removeChild(previewNode)
-
-    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-      url: "/target-url", // Set the url
-      thumbnailWidth: 80,
-      thumbnailHeight: 80,
-      parallelUploads: 20,
-      previewTemplate: previewTemplate,
-      autoQueue: false, // Make sure the files aren't queued until manually added
-      previewsContainer: "#previews", // Define the container to display the previews
-      clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-    })
-
-    myDropzone.on("addedfile", function(file) {
-      // Hookup the start button
-      file.previewElement.querySelector(".start").onclick = function() {
-        myDropzone.enqueueFile(file)
-      }
-    })
-
-    // Update the total progress bar
-    myDropzone.on("totaluploadprogress", function(progress) {
-      document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-    })
-
-    myDropzone.on("sending", function(file) {
-      // Show the total progress bar when upload starts
-      document.querySelector("#total-progress").style.opacity = "1"
-      // And disable the start button
-      file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
-    })
-
-    // Hide the total progress bar when nothing's uploading anymore
-    myDropzone.on("queuecomplete", function(progress) {
-      document.querySelector("#total-progress").style.opacity = "0"
-    })
-
-    // Setup the buttons for all transfers
-    // The "add files" button doesn't need to be setup because the config
-    // `clickable` has already been specified.
-    document.querySelector("#actions .start").onclick = function() {
-      myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
-    }
-    document.querySelector("#actions .cancel").onclick = function() {
-      myDropzone.removeAllFiles(true)
-    }
-    // DropzoneJS Demo Code End
   </script>
 </body>
 

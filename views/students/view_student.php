@@ -22,6 +22,7 @@ if (!empty($_POST)) {
     require_once ROOTPATH . '/controller/StudentController.php';
     $studentController = new StudentController();
     $student = $studentController->get_information_student($_GET['id']);
+    
 } else {
 
     header('Location: ' . BASE_URL . 'views/students/students.php');

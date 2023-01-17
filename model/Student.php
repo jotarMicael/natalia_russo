@@ -23,7 +23,15 @@ class Student
 
     function insert_student(&$student)
     {
+
+
         try {
+
+            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) ) {
+                return array(4, '<div class="invalid-feedback d-block">Todos los campos de esta sección deben completarse*</div>');
+            }
+
+
             $query = " SELECT s.id FROM " . $this->table_name . " s 
             WHERE
                 s.name=:name and s.surname=:surname
@@ -204,6 +212,7 @@ class Student
             GROUP BY s.id
             LIMIT 0,1
         ";
+
 
             $stmt = $this->conn->prepare($query);
 
@@ -440,7 +449,7 @@ class Student
     {
 
         try {
-            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS parents_email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number, s.authorized as authorized,
+            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS parents_email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,
             GROUP_CONCAT(sd.disease_id) AS diseases 
             FROM " . $this->table_name . " s 
             INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
@@ -493,39 +502,45 @@ class Student
     {
         try {
 
+
+            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['parents_email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) ) {
+ 
+                return array(4, '<div class="invalid-feedback d-block">Todos los campos de esta sección deben completarse*</div>');
+            }
+
             $insert = '';
 
             if (!empty($student['other_diseases_1'])) {
-                $insert .= ',s.other_disease_1=' . $student['other_diseases_1'];
+                $insert .= ',s.other_disease_1=' . "'" . $student['other_diseases_1'] . "'";
             }
 
             if (!empty($student['other_diseases_2'])) {
-                $insert .= ',s.other_disease_2=' . $student['other_diseases_2'];
+                $insert .= ',s.other_disease_2=' . "'" . $student['other_diseases_2'] . "'";
             }
 
             if (!empty($student['internated'])) {
-                $insert .= ',s.internal=' . $student['internated'];
+                $insert .= ',s.internal=' . "'" . $student['internated'] . "'";
             }
 
             if (!empty($student['surgery'])) {
-                $insert .= ',s.surgery=' . $student['surgery'];
+                $insert .= ',s.surgery=' . "'" . $student['surgery'] . "'";
             }
 
             if (!empty($student['medication'])) {
-                $insert .= ',s.medication=' . $student['medication'];
+                $insert .= ',s.medication=' . "'" . $student['medication'] . "'";
             }
 
             if (!empty($student['antitetano'])) {
-                $antitetano_date = substr($student['antitetano'], 6, 4) . '-' . substr($student['antitetano'], 3, 2) . '-' . substr($student['antitetano'], 0, 2);
+                $antitetano_date = "'" . substr($student['antitetano'], 6, 4) . '-' . substr($student['antitetano'], 3, 2) . '-' . substr($student['antitetano'], 0, 2) . "'";
                 $insert .= ',s.tetanus_vaccine=' . $antitetano_date;
             }
 
             if (!empty($student['diet'])) {
-                $insert .= ',s.diet=' . $student['diet'];
+                $insert .= ',s.diet=' . "'" . $student['diet'] . "'";
             }
 
             if (!empty($student['allergy'])) {
-                $insert .= ',s.allergy=' . $student['allergy'];
+                $insert .= ',s.allergy=' . "'" . $student['allergy'] . "'";
             }
 
             $query = "DELETE FROM  " . $this->table_name2 . " ss
@@ -568,7 +583,7 @@ class Student
                         " . implode(",", $diseases) . ";
                 ";
 
-             
+
 
                 $stmt = $this->conn->prepare($query);
 
@@ -578,12 +593,13 @@ class Student
             $query = "UPDATE " . $this->table_name . " s
             SET 
                 s.name='{$student['student_name']}',s.surname='{$student['student_surname']}',s.birth_date='" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "',
-                s.father_name='{$student['father_name']}',s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.address='{$student['address']}',s.parents_email='{$student['parents_email']}',s.social_work_id={$student['medical_coverage']},
+                s.father_name='{$student['father_name']}',s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.address='{$student['address']}',s.authorized=". (empty($student['authorized']) ? 0 : 1) .",s.parents_email='{$student['parents_email']}',s.social_work_id={$student['medical_coverage']},
                 s.afiliate_number='{$student['affiliate_number']}'" . $insert . "
             WHERE 
                 s.id={$student['id']}
             LIMIT 1
             ";
+
 
             $stmt = $this->conn->prepare($query);
 

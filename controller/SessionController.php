@@ -4,7 +4,7 @@ class SessionController {
 
 	public static function mustBeLoggedIn() {
 		if(!isset($_SESSION['IN']) || !$_SESSION['IN']) {
-			header('Location: ' . BASE_URL . 'views/logout');
+			header('Location: ' . BASE_URL . 'views/logout.php');
   			exit();
         }
 	}
