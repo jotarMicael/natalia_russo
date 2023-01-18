@@ -65,7 +65,7 @@ class Service
 
             $stmt->execute();
 
-            return array(1, '<strong>Servicio registrado en el sistema.</strong>');
+            return array(1, '<strong>Egreso registrado en el sistema.</strong>');
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }

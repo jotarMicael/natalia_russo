@@ -79,10 +79,25 @@
           </ul>
         </li>
         <li class="nav-item">
+          <a href="#" class="nav-link active bg-maroon">
+            <i class="nav-icon fas fa-chart-line"></i>
+            <p> Actividades <i class=" fas fa-angle-left right"></i></p>
+          </a>
+
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('a')) ? 'block' : 'none'; ?>;">
+            <li class="nav-item">
+              <a href="<?php echo BASE_URL; ?>views/activities/activities.php" class="nav-link <?php echo $nav == 'a' ? 'bg-orange' : ''; ?>">
+                <i class="nav-icon fas fa-chart-line"></i>
+                <p>Alta de actividad</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo BASE_URL; ?>views/services/services.php" class="nav-link <?php echo $nav == 's' ? 'bg-orange' : ''; ?>" class="nav-link">
-            <i class="nav-icon fas fa-tools"></i>
+          <i class="nav-icon fas fa-cash-register"></i>
             <p>
-              Servicios
+              Egresos
             </p>
           </a>
         </li>
@@ -126,7 +141,7 @@
     });
   </script>
   <div class="sidebar-custom">
-    
+
     <a onclick="return confirm('<?php echo BASE_URL; ?>views/logout.php',true);" class="btn btn-secondary btn-danger hide-on-collapse pos-right"><i class="nav-icon fas fa-sign-out-alt"></i>Salir</a>
   </div>
 </aside>

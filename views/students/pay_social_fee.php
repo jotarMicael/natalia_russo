@@ -128,7 +128,7 @@ if (!empty($_POST)) {
                     </div>
                   </div>
                   <div class="card-footer">
-                   
+
                     </form>
                     <button onclick="return share_pay();" type="submit" class="btn bg-success"><i class="fas fa-money-check-alt mr-1"></i>Abonar</button>
                   </div>
@@ -159,7 +159,7 @@ if (!empty($_POST)) {
                     <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                       <thead>
                         <tr>
-
+                          <th>Nombre completo</th>
                           <th>Fecha cuota</th>
                           <th>Importe abonado</th>
                           <th>Fecha pago</th>
@@ -171,6 +171,7 @@ if (!empty($_POST)) {
                         foreach (explode(",", $student['shares']) as $share) {
                           $share = explode(":", $share); ?>
                           <tr>
+                            <td class="text-right"><?= $student['name'] . ' ' . $student['surname'] ?></td>
                             <td class="text-right"><?php echo $share[0]; ?></td>
                             <td class="text-right"><?php echo '$' . $share[1]; ?></td>
                             <td class="text-right"><?php echo $share[2]; ?></td>
@@ -262,15 +263,16 @@ if (!empty($_POST)) {
 
   <!-- Page specific script -->
   <script>
-     function share_pay() {
+    function share_pay() {
 
-      return confirm('#pay_social_fee',false);
+      return confirm('#pay_social_fee', false);
 
     }
+
     function send_share_id(id) {
       $('#share_id').val(id);
       $('#pdf').submit();
-   
+
 
     }
     $(function() {

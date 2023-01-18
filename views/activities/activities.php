@@ -11,16 +11,16 @@ error_reporting(E_ERROR);
 
 require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
-require_once ROOTPATH . '/controller/ServiceController.php';
+require_once ROOTPATH . '/controller/ActivityController.php';
 
 SessionController::mustBeLoggedIn();
 
-$nav = 's';
+$nav = 'a';
 
-$serviceController = new ServiceController();
+$activityController = new ActivityController();
 
 if (!empty($_POST)) {
-    $result = $serviceController->insert_service_import($_POST);
+    $result = $activityController->insert_activity($_POST);
 }
 ?>
 
@@ -30,7 +30,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo HEAD; ?> | Egresos</title>
+    <title><?php echo HEAD; ?> | Actividades</title>
     <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
 
     <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
@@ -95,54 +95,33 @@ if (!empty($_POST)) {
                         <div class="col-12 ">
                             <div class="card card-maroon">
                                 <div class="card-header">
-                                    <h3 class="card-title"><strong>Registrar egreso</strong> <i class="fas fa-cash-register"></i></strong></h3>
+                                    <h3 class="card-title"><strong>Registrar actividad</strong> <i class="fas fa-chart-line"></i></strong></h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="container">
-                                        <div class="row justify-content-around">
+                                        <div class="row justify-content-start">
                                             <div class="col-4">
-                                                <form id="create_service" method="post" href="#">
+                                                <form id="create_activity" method="post" href="#">
                                                     <div class="form-group">
-                                                        <label>Fecha</label>
+                                                        <label>Nombre</label>
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                                             </div>
-                                                            <input required name="service_date" type="text" value="<?php echo $_POST ? $_POST['service_date'] : ''; ?>" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                                            <input required name="name" type="text" value="<?php echo $_POST ? $_POST['name'] : ''; ?>" class="form-control" >
                                                         </div>
                                                         <!-- /.input group -->
                                                     </div>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label for="exampleSelectRounded0">Servicio</label>
-                                                    <select name="service" class="custom-select rounded-0" id="exampleSelectRounded0">
-                                                        <option value="0">Ninguno</option>
-                                                        <?php foreach ($serviceController->get_services() as $service) { ?>
-                                                            <option value="<?= $service['id'] ?>"><?= $service['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Importe</label>
-
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                                        </div>
-                                                        <input type="number" step="0.01" min="0" required name="import" value="<?php echo $_POST ? $_POST['import'] : ''; ?>" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-footer">
 
                                     </form>
-                                    <button onclick="create_service();" type="submit" class="btn bg-orange"><i class="fas fa-cash-register"></i> Registrar egreso</button>
+                                    <button onclick="create_activity();" type="submit" class="btn bg-orange"><i class="fas fa-chart-line"></i> Registrar actividad</button>
                                 </div>
                             </div>
 
@@ -150,29 +129,27 @@ if (!empty($_POST)) {
                         </div>
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header"> <strong><i class="fas fa-cash-register"></i> Egresos</strong></div>
+                                <div class="card-header"> <strong><i class="fas fa-chart-line"></i> Actividades</strong></div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <?php $services = $serviceController->get_services_imports();
-                                    if (!empty($services)) { ?>
+                                    <?php $activities = $activityController->get_activities();
+                                    if (!empty($activities)) { ?>
                                         <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                                             <thead>
                                                 <tr>
-                                                    <th>Egreso</th>
-                                                    <th>Importe</th>
-                                                    <th>Fecha egreso</th>
+                                                    <th>Id</th>
+                                                    <th>Nombre</th>
                                                     <th>Fecha carga</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                foreach ($services as $service) {
+                                                foreach ($activities as $activity) {
                                                 ?>
                                                     <tr>
-                                                        <td class="text-left"><?php echo $service['name']; ?></td>
-                                                        <td class="text-right"><?php echo '$' . $service['import']; ?></td>
-                                                        <td class="text-right"><?php echo $service['service_date']; ?></td>
-                                                        <td class="text-right"><?php echo $service['created_at']; ?></td>
+                                                        <td class="text-left"><?php echo $activity['id']; ?></td>
+                                                        <td class="text-left"><?php echo $activity['name']; ?></td>
+                                                        <td class="text-right"><?php echo $activity['created_at']; ?></td>
 
                                                     </tr>
                                                 <?php } ?>
@@ -180,7 +157,7 @@ if (!empty($_POST)) {
 
                                         </table>
                                     <?php } else { ?>
-                                        <span class="text-danger">No posee ningún egreso</span>
+                                        <span class="text-danger">No posee ningúna actividad</span>
                                     <?php } ?>
                                 </div>
                                 <!-- /.card-body -->
@@ -254,9 +231,9 @@ if (!empty($_POST)) {
     <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
     <!-- Page specific script -->
     <script>
-        function create_service() {
+        function create_activity() {
 
-            return confirm('#create_service', false);
+            return confirm('#create_activity', false);
         }
         $(function() {
             //Initialize Select2 Elements

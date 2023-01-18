@@ -11,6 +11,7 @@ class Student
     private $table_name3 = "social_works";
     private $table_name4 = "students_share";
     private $table_name5 = "diseases";
+    private $table_name6 = "students_activities";
 
     public function __construct($db = null)
     {
@@ -27,7 +28,7 @@ class Student
 
         try {
 
-            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) ) {
+            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) || empty($student['emergency_name']) || empty($student['activities']) ) {
                 return array(4, '<div class="invalid-feedback d-block">Todos los campos de esta sección deben completarse*</div>');
             }
 
@@ -102,13 +103,14 @@ class Student
             mother_name,
             private_phone_number,
             emergency_phone_number,
+            emergency_name,
             address,
             parents_email,
             social_work_id,
             afiliate_number,
             authorized " . $insert . ")
             VALUES
-            ('{$student['student_name']}','{$student['student_surname']}','" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "','{$student['father_name']}','{$student['mother_name']}','{$student['private_number']}','{$student['emergency_number']}','{$student['address']}','{$student['email']}',{$student['medical_coverage']},'{$student['affiliate_number']}'," . (empty($student['authorized']) ? 0 : 1) .  $values . " );
+            ('{$student['student_name']}','{$student['student_surname']}','" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "','{$student['father_name']}','{$student['mother_name']}','{$student['private_number']}','{$student['emergency_number']}','{$student['emergency_name']}','{$student['address']}','{$student['email']}',{$student['medical_coverage']},'{$student['affiliate_number']}'," . (empty($student['authorized']) ? 0 : 1) .  $values . " );
         ";
 
 
@@ -152,6 +154,23 @@ class Student
                 $stmt->execute();
             }
 
+            
+                $activities = [];
+                foreach ($student['activities'] as $activity) {
+                    $activities[] = "($id,$activity)";
+                }
+
+                $query = "INSERT INTO " . $this->table_name6 . " 
+                        (student_id,activity_id)
+                        VALUES
+                        " . implode(",", $activities) . ";
+                ";
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->execute();
+            
+
             return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
@@ -188,6 +207,7 @@ class Student
             s.mother_name,
             s.private_phone_number,
             s.emergency_phone_number,
+            s.emergency_name,
             s.address,
             s.parents_email,
             sw.name as social_work,

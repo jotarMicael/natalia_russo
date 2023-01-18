@@ -17,12 +17,11 @@ if (!empty($_POST)) {
     if (!empty($_POST['share_id'])) {
         $studentController->generate_fee_pdf($_POST['share_id']);
         die;
-    } 
+    }
 } elseif (!empty($_GET)) {
     require_once ROOTPATH . '/controller/StudentController.php';
     $studentController = new StudentController();
     $student = $studentController->get_information_student($_GET['id']);
-    
 } else {
 
     header('Location: ' . BASE_URL . 'views/students/students.php');
@@ -80,9 +79,10 @@ if (!empty($_POST)) {
 
                                 <div class="card-body">
                                     <strong><i class="fas fa-book mr-1"></i> Datos personales</strong>
-                                    <p>Fecha nacimiento: <span class="text-info"><?php echo $student['birth_date'] ?></span>&nbsp;-Número privado: <span class="text-info"><?php echo $student['private_phone_number'] ?></span>&nbsp;-Número de emergencia: <span class="text-info"><?php echo $student['emergency_phone_number'] ?></span>
+                                    <p>Fecha nacimiento: <span class="text-info"><?php echo $student['birth_date'] ?></span>&nbsp;-Número privado: <span class="text-info"><?php echo $student['private_phone_number'] ?></span>&nbsp;-Número de contacto emergencia: <span class="text-info"><?php echo $student['emergency_phone_number'] ?></span>
+
                                         &nbsp;-Obra social: <span class="text-info"><?php echo $student['social_work'] ?></span>
-                                        <br>N°afiliado: <span class="text-info"><?php echo $student['afiliate_number'] ?></span>
+                                        <br>N°afiliado: <span class="text-info"><?php echo $student['afiliate_number'] ?></span>&nbsp;-Nombre de contacto emergencia: <span class="text-info"><?php echo $student['emergency_name'] ?></span>
                                     </p>
                                     <hr>
                                     <strong><i class="fas fa-users mr-1"></i> Nombre y Email de padres/tutores</strong>
@@ -119,7 +119,7 @@ if (!empty($_POST)) {
                                                 <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                                                     <thead>
                                                         <tr>
-
+                                                            <th>Nombre completo</th>
                                                             <th>Fecha cuota</th>
                                                             <th>Importe abonado</th>
                                                             <th>Fecha pago</th>
@@ -131,6 +131,7 @@ if (!empty($_POST)) {
                                                         foreach (explode(",", $student['shares']) as $share) {
                                                             $share = explode(":", $share); ?>
                                                             <tr>
+                                                            <td class="text-right"><?= $student['name'] .' '. $student['surname'] ?></td>
                                                                 <td class="text-right"><?php echo $share[0]; ?></td>
                                                                 <td class="text-right"><?php echo '$' . $share[1]; ?></td>
                                                                 <td class="text-right"><?php echo $share[2]; ?></td>

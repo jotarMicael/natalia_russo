@@ -7,7 +7,7 @@ class Teacher
 
     private $conn;
     private $table_name = "teachers";
-
+    private $table_name2 = "teachers_activities";
 
     public function __construct($db = null)
     {
@@ -55,6 +55,22 @@ class Teacher
 
             $stmt->execute();
 
+            $id = $this->conn->lastInsertId();
+
+
+            $activities = [];
+            foreach ($teacher['activities'] as $activity) {
+                $activities[] = "($id,$activity)";
+            }
+
+            $query = "INSERT INTO " . $this->table_name2 . " 
+                        (teacher_id,activity_id)
+                        VALUES
+                        " . implode(",", $activities) . ";
+                ";
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
             return array(1, '<strong>' .  $teacher['name'] . ' ' . $teacher['surname'] . '</strong> dado de alta');
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
@@ -72,7 +88,7 @@ class Teacher
             t.email,
             t.birth_date,
             t.created_at
-        FROM ".$this->table_name." t";
+        FROM " . $this->table_name . " t";
 
         $stmt = $this->conn->prepare($query);
 

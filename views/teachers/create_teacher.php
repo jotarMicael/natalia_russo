@@ -45,6 +45,9 @@ if (!empty($_POST)) {
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <script src="<?php echo BASE_URL; ?>/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
@@ -93,7 +96,7 @@ if (!empty($_POST)) {
                   <div class="container">
                     <div class="row justify-content-around">
                       <div class="col-4">
-                        <form method="post" href="#">
+                        <form id="create_teacher" method="post" action="#">
                           <div class="form-group">
                             <label for="exampleInputEmail1">Nombre</label>
                             <input required type="text" class="form-control" value="<?php echo $_POST ? $_POST['name'] : ''; ?>" id="name" name="name" placeholder="Ingrese un nombre">
@@ -138,13 +141,30 @@ if (!empty($_POST)) {
                           <label for="exampleInputEmail1">Dirección</label>
                           <input required type="text" class="form-control" id="address" name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" placeholder="Ingrese una dirección">
                         </div>
+                        <div class="form-group">
+                          <label>Actividades</label>
+                          <div class="select2-maroon">
+                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                              <?php
+                              require_once ROOTPATH . '/controller/ActivityController.php';
+                              $activityController = new ActivityController();
+                              foreach ($activityController->get_activities() as $activity) {
+                              ?>
+                                <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                              <?php }
+                              ?>
+
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn bg-orange">Registrar</button>
+
                   </form>
+                  <button onclick="return create_teacher();" type="submit" class="btn bg-orange">Registrar profesor</button>
                 </div>
               </div>
             </div>
@@ -247,8 +267,18 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
 
+  <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
+
   <script>
+    function create_teacher() {
+
+      return confirm('#create_teacher', false);
+
+    }
     $(function() {
+
+
       //Initialize Select2 Elements
       $('.select2').select2()
 
