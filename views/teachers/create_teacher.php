@@ -79,7 +79,7 @@ if (!empty($_POST)) {
 
           include ROOTPATH . '/common/alert_danger.php';
         }
-        unset($result);
+
         ?>
 
       </div>
@@ -90,7 +90,7 @@ if (!empty($_POST)) {
 
               <div class="card card-lime">
                 <div class="card-header">
-                  <h3 class="card-title"><strong>Registro de profesor</strong></h3>
+                  <h3 class="card-title"><strong>Registro de profesor</strong> <i class="fas fa-chalkboard-teacher"></i></h3>
                 </div>
                 <div class="card-body">
                   <div class="container">
@@ -142,24 +142,50 @@ if (!empty($_POST)) {
                           <input required type="text" class="form-control" id="address" name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" placeholder="Ingrese una dirección">
                         </div>
                         <div class="form-group">
-                          <label>Actividades</label>
-                          <div class="select2-maroon">
-                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                              <?php
-                              require_once ROOTPATH . '/controller/ActivityController.php';
-                              $activityController = new ActivityController();
-                              foreach ($activityController->get_activities() as $activity) {
-                              ?>
-                                <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                              <?php }
-                              ?>
+                                                        <label>Actividades</label>
+                                                        <div class="select2-maroon">
+                                                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                                <?php
+                                                                require_once ROOTPATH . '/controller/ActivityController.php';
+                                                                $activityController = new ActivityController();
+                                                                if ($_POST['activities']) {
+                                                                    foreach ($activityController->get_activities() as $activity) {
+                                                                ?>
+                                                                        <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php }
+                                                                } else {
+                                                                    foreach ($activityController->get_activities() as $activity) { ?>
+                                                                        <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
-                            </select>
-                          </div>
+                        <div class="form-group">
+                          <label for="exampleSelectBorderWidth2">Cobertura médica</label>
+
+                          <select required name="art" class="custom-select" id="exampleSelectBorderWidth2">
+                            <option value="0">Ninguna</option>
+                            <?php require_once ROOTPATH . '/controller/ArtController.php';
+                            $artController = new ArtController();
+                            foreach ($artController->get_arts() as $art) {
+                            ?>
+                              <option <?= $_POST['art'] == $art['id'] ? ' selected="selected"' : ''; ?> value="<?php echo $art['id'] ?>"><?php echo $art['name'] ?></option>
+                            <?php } ?>
+                          </select>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <?php
+                  if ($result[0] == 4) {
+
+                    echo $result[1];
+                  }
+                  unset($result); ?>
                 </div>
                 <div class="card-footer">
 
@@ -171,7 +197,7 @@ if (!empty($_POST)) {
             <div class="col-12">
               <div class="card card-lime">
                 <div class="card-header bg-lime">
-                  <h3 class="card-title"><strong>Profesores</strong> </span></h3>
+                  <h3 class="card-title"><strong>Profesores</strong> <i class="fas fa-chalkboard-teacher"></i></h3>
                 </div>
 
                 <div class="card-body">

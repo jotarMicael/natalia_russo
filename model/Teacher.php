@@ -21,11 +21,16 @@ class Teacher
     function insert_teacher(&$teacher)
     {
         try {
+            
+            if (empty($teacher['name']) || empty($teacher['surname']) || empty($teacher['dni']) || empty($teacher['private_phone_number']) || empty($teacher['email']) || empty($teacher['date_birth']) || empty($teacher['address']) || empty($teacher['activities']) || empty($teacher['art'])){
+                return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
+            }
+
             $query = " SELECT t.id FROM " . $this->table_name . " t
             WHERE
                 t.dni = :dni
             LIMIT 0,1
-        ";
+            ";
 
             $stmt = $this->conn->prepare($query);
 
@@ -45,9 +50,10 @@ class Teacher
             address,
             private_phone_number,
             email,
-            birth_date)
+            birth_date,
+            art_id)
             VALUES
-            ('{$teacher['name']}','{$teacher['surname']}','{$teacher['dni']}','{$teacher['address']}','{$teacher['private_phone_number']}','{$teacher['email']}','" . substr($teacher['date_birth'], 6, 4) . '-' . substr($teacher['date_birth'], 3, 2) . '-' . substr($teacher['date_birth'], 0, 2) . "' );
+            ('{$teacher['name']}','{$teacher['surname']}','{$teacher['dni']}','{$teacher['address']}','{$teacher['private_phone_number']}','{$teacher['email']}','" . substr($teacher['date_birth'], 6, 4) . '-' . substr($teacher['date_birth'], 3, 2) . '-' . substr($teacher['date_birth'], 0, 2) . "',{$teacher['art']} );
         ";
 
 

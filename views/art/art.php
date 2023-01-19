@@ -11,16 +11,16 @@ error_reporting(E_ERROR);
 
 require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
-require_once ROOTPATH . '/controller/ActivityController.php';
+require_once ROOTPATH . '/controller/ArtController.php';
 
 SessionController::mustBeLoggedIn();
 
-$nav = 'a';
+$nav = 'art';
 
-$activityController = new ActivityController();
+$artController = new ArtController();
 
 if (!empty($_POST)) {
-    $result = $activityController->insert_activity($_POST);
+    $result = $artController->insert_art($_POST);
 }
 ?>
 
@@ -30,7 +30,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo HEAD; ?> | Actividades</title>
+    <title><?php echo HEAD; ?> | ART</title>
     <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -93,13 +93,13 @@ if (!empty($_POST)) {
                         <div class="col-12 ">
                             <div class="card card-maroon">
                                 <div class="card-header">
-                                    <h3 class="card-title"><strong>Registrar actividad</strong> <i class="fas fa-chart-line"></i></strong></h3>
+                                    <h3 class="card-title"><strong>Registrar ART</strong> <i class="fas fa-user-shield"></i></strong></h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row justify-content-start">
                                             <div class="col-4">
-                                                <form id="create_activity" method="post" href="#">
+                                                <form id="create_art" method="post" href="#">
                                                     <div class="form-group">
                                                         <label>Nombre</label>
                                                         <div class="input-group">
@@ -119,7 +119,7 @@ if (!empty($_POST)) {
                                 <div class="card-footer">
 
                                     </form>
-                                    <button onclick="create_activity();" type="submit" class="btn bg-orange"><i class="fas fa-chart-line"></i> Registrar actividad</button>
+                                    <button onclick="create_art();" type="submit" class="btn bg-orange"><i class="fas fa-user-shield"></i> Registrar ART</button>
                                 </div>
                             </div>
 
@@ -127,11 +127,11 @@ if (!empty($_POST)) {
                         </div>
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header"> <strong><i class="fas fa-chart-line"></i> Actividades</strong></div>
+                                <div class="card-header"> <strong><i class="fas fa-user-shield"></i> ART´s</strong></div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <?php $activities = $activityController->get_activities();
-                                    if (!empty($activities)) { ?>
+                                    <?php $arts = $artController->get_arts();
+                                    if (!empty($arts)) { ?>
                                         <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                                             <thead>
                                                 <tr>
@@ -142,12 +142,12 @@ if (!empty($_POST)) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                foreach ($activities as $activity) {
+                                                foreach ($arts as $art) {
                                                 ?>
                                                     <tr>
-                                                        <td class="text-left"><?php echo $activity['id']; ?></td>
-                                                        <td class="text-left"><?php echo $activity['name']; ?></td>
-                                                        <td class="text-right"><?php echo $activity['created_at']; ?></td>
+                                                        <td class="text-left"><?php echo $art['id']; ?></td>
+                                                        <td class="text-left"><?php echo $art['name']; ?></td>
+                                                        <td class="text-right"><?php echo $art['created_at']; ?></td>
 
                                                     </tr>
                                                 <?php } ?>
@@ -155,7 +155,7 @@ if (!empty($_POST)) {
 
                                         </table>
                                     <?php } else { ?>
-                                        <span class="text-danger">No posee ningúna actividad</span>
+                                        <span class="text-danger">No posee ningúna ART</span>
                                     <?php } ?>
                                 </div>
                                 <!-- /.card-body -->
@@ -229,9 +229,9 @@ if (!empty($_POST)) {
     <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
     <!-- Page specific script -->
     <script>
-        function create_activity() {
+        function create_art() {
 
-            return confirm('#create_activity', false);
+            return confirm('#create_art', false);
         }
         $(function() {
             //Initialize Select2 Elements

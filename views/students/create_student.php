@@ -138,21 +138,27 @@ if (!empty($_POST)) {
                           </div>
 
                           <div class="form-group">
-                            <label>Actividades</label>
-                            <div class="select2-maroon">
-                              <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <?php 
-                                require_once ROOTPATH . '/controller/ActivityController.php';
-                                $activityController = new ActivityController();
-                                foreach ($activityController->get_activities() as $activity) {
-                                ?>
-                                  <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                <?php }
-                                ?>
-                                
-                              </select>
-                            </div>
-                          </div>
+                                                        <label>Actividades</label>
+                                                        <div class="select2-maroon">
+                                                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                                <?php
+                                                                require_once ROOTPATH . '/controller/ActivityController.php';
+                                                                $activityController = new ActivityController();
+                                                                if ($_POST['activities']) {
+                                                                    foreach ($activityController->get_activities() as $activity) {
+                                                                ?>
+                                                                        <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php }
+                                                                } else {
+                                                                    foreach ($activityController->get_activities() as $activity) { ?>
+                                                                        <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
                       </div>
                       <div class="col-4">

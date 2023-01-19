@@ -43,12 +43,15 @@ if (!empty($_POST)) {
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
-      <a href="#" style="color: #d81b60;"><b><?php echo substr(SYSTEM_NAME,0,7); ?></b><?php echo substr(SYSTEM_NAME,7); ?></a>
+      <a href="#" style="color: #d81b60;"><b><?php echo substr(SYSTEM_NAME,0,4); ?></b><?php echo substr(SYSTEM_NAME,4); ?></a>
+     
     </div>
     <!-- /.login-logo -->
     <div class="card">
       <div class="card-body login-card-body">
-        <p class="login-box-msg">Iniciar Sesión</p>
+      <p class="login-box-msg">Iniciar Sesión<br><img src="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg" width="40%" alt="Naty"></p>
+        
+        
         <form action="#" method="post" class="form-horizontal">
           <div class="input-group mb-3">
             <input name="username" type="username" class="form-control" value="<?php echo $_POST ? $_POST['username'] : ''; ?>" placeholder="Usuario">

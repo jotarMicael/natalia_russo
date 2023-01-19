@@ -29,7 +29,7 @@ class Student
         try {
 
             if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) || empty($student['emergency_name']) || empty($student['activities']) ) {
-                return array(4, '<div class="invalid-feedback d-block">Todos los campos de esta sección deben completarse*</div>');
+                return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
             }
 
 

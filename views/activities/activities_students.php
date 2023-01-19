@@ -11,17 +11,12 @@ error_reporting(E_ERROR);
 
 require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
-require_once ROOTPATH . '/controller/ActivityController.php';
+
 
 SessionController::mustBeLoggedIn();
 
-$nav = 'a';
+$nav = 'as';
 
-$activityController = new ActivityController();
-
-if (!empty($_POST)) {
-    $result = $activityController->insert_activity($_POST);
-}
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +39,9 @@ if (!empty($_POST)) {
     <!-- daterange picker -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.css">
     <script src="<?php echo BASE_URL; ?>/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -66,19 +64,7 @@ if (!empty($_POST)) {
                     <div class="row mb-2">
                         <div class="col-sm-6">
 
-                            <?php
-                            if ($result[0] == 1) {
-                                include ROOTPATH . '/common/alert_success.php';
-                                unset($_POST);
-                            } elseif ($result[0] == 2) {
 
-                                include ROOTPATH . '/common/alert_warning.php';
-                            } elseif ($result[0] == 3) {
-
-                                include ROOTPATH . '/common/alert_danger.php';
-                            }
-                            unset($result);
-                            ?>
 
 
                         </div>
@@ -93,75 +79,102 @@ if (!empty($_POST)) {
                         <div class="col-12 ">
                             <div class="card card-maroon">
                                 <div class="card-header">
-                                    <h3 class="card-title"><strong>Registrar actividad</strong> <i class="fas fa-chart-line"></i></strong></h3>
+                                    <h3 class="card-title"><strong>Alumnos de la actividad</strong> <i class="fas fa-chart-line"></i></strong></h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row justify-content-start">
-                                            <div class="col-4">
-                                                <form id="create_activity" method="post" href="#">
+                                            <div class="col-6">
+                                                <form id="search_students" method="post" href="#">
                                                     <div class="form-group">
-                                                        <label>Nombre</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                            </div>
-                                                            <input required name="name" type="text" value="<?php echo $_POST ? $_POST['name'] : ''; ?>" class="form-control" >
+                                                        <label>Actividades</label>
+                                                        <div class="select2-maroon">
+                                                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                                <?php
+                                                                require_once ROOTPATH . '/controller/ActivityController.php';
+                                                                $activityController = new ActivityController();
+                                                                if ($_POST['activities']) {
+                                                                    foreach ($activityController->get_activities() as $activity) {
+                                                                ?>
+                                                                        <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php }
+                                                                } else {
+                                                                    foreach ($activityController->get_activities() as $activity) { ?>
+                                                                        <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+                                                                <?php } ?>
+                                                            </select>
                                                         </div>
-                                                        <!-- /.input group -->
                                                     </div>
                                             </div>
-                                            
-                                            
+
+
                                         </div>
+                                        <?php
+
+                                        if (($_SERVER['REQUEST_METHOD'] === 'POST')  && (empty($_POST['activities']))) { ?>
+
+                                            <span class="text-danger">Debe seleccionar al menos una actividad*</span>
+                                        <?php
+                                        } ?>
                                     </div>
+
                                 </div>
                                 <div class="card-footer">
 
                                     </form>
-                                    <button onclick="create_activity();" type="submit" class="btn bg-orange"><i class="fas fa-chart-line"></i> Registrar actividad</button>
+                                    <button id="ss" onclick="search_students();" type="submit" class="btn bg-orange"><i class="fas fa-user"></i> Buscar alumnos</button>
                                 </div>
                             </div>
 
 
                         </div>
                         <div class="col-12">
-                            <div class="card">
-                                <div class="card-header"> <strong><i class="fas fa-chart-line"></i> Actividades</strong></div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <?php $activities = $activityController->get_activities();
-                                    if (!empty($activities)) { ?>
-                                        <table id="example1" class="table table-bordered table-striped table-hover table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Nombre</th>
-                                                    <th>Fecha carga</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                foreach ($activities as $activity) {
-                                                ?>
+                            <?php
+                            if ($_POST) { ?>
+                                <div class="card">
+                                    <div class="card-header"> <strong><i class="fas fa-chart-line"></i> Actividades</strong></div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <?php
+
+                                        $activitys = $activityController->get_students_by_activities($_POST['activities']);
+
+                                        if (!empty($activitys)) { ?>
+                                            <table id="example1" class="table table-bordered table-striped table-hover table-sm">
+                                                <thead>
                                                     <tr>
-                                                        <td class="text-left"><?php echo $activity['id']; ?></td>
-                                                        <td class="text-left"><?php echo $activity['name']; ?></td>
-                                                        <td class="text-right"><?php echo $activity['created_at']; ?></td>
-
+                                                        <th>Id</th>
+                                                        <th>Nombre completo</th>
+                                                        <th>Actividades</th>
                                                     </tr>
-                                                <?php } ?>
-                                            </tbody>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    foreach ($activitys as $activity) {
+                                                    ?>
+                                                        <tr>
+                                                            <td class="text-left"><?= $activity['id']; ?></td>
+                                                            <td class="text-left"><?= $activity['name'] . ' ' . $activity['surname']; ?></td>
 
-                                        </table>
-                                    <?php } else { ?>
-                                        <span class="text-danger">No posee ningúna actividad</span>
-                                    <?php } ?>
+                                                            <td class="text-left"><?= $activity['activities']; ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+
+                                            </table>
+                                        <?php } else { ?>
+                                            <span class="text-danger">No posee ningún estudiante</span>
+                                        <?php
+                                        } ?>
+                                    </div>
+                                    <!-- /.card-body -->
                                 </div>
-                                <!-- /.card-body -->
-                            </div>
 
-
+                            <?php
+                            } ?>
                         </div>
                     </div>
                 </div>
@@ -229,9 +242,9 @@ if (!empty($_POST)) {
     <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
     <!-- Page specific script -->
     <script>
-        function create_activity() {
-
-            return confirm('#create_activity', false);
+        function search_students() {
+            $('#ss').attr('disabled', true);
+            $('#search_students').submit();
         }
         $(function() {
             //Initialize Select2 Elements

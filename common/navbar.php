@@ -15,8 +15,8 @@
 
 <aside class="main-sidebar  main-sidebar-custom sidebar-dark-primary elevation-4">
   <a href="#" class="brand-link">
-    <img src="<?php echo BASE_URL; ?>/dist/img/dance.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light" style="color: #d81b60;"><b><?php echo substr(SYSTEM_NAME, 0, 7); ?></b><?php echo substr(SYSTEM_NAME, 7); ?></span>
+    <img src="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light" style="color: #d81b60;"><b><?php echo substr(SYSTEM_NAME, 0, 4); ?></b><?php echo substr(SYSTEM_NAME, 4); ?></span>
   </a>
 
   <!-- Sidebar user panel (optional) -->
@@ -72,7 +72,7 @@
           <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ct')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/teachers/create_teacher.php" class="nav-link <?php echo $nav == 'ct' ? 'bg-orange' : ''; ?>">
-                <i class="nav-icon fas fa-user"></i>
+              <i class="nav-icon fas fa-chalkboard-teacher"></i>
                 <p>Alta de profesor</p>
               </a>
             </li>
@@ -98,6 +98,14 @@
           <i class="nav-icon fas fa-cash-register"></i>
             <p>
               Egresos
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo BASE_URL; ?>views/art/art.php" class="nav-link <?php echo $nav == 'art' ? 'bg-orange' : ''; ?>" class="nav-link">
+          <i class="nav-icon fas fa-user-shield"></i>
+            <p>
+              ART
             </p>
           </a>
         </li>
