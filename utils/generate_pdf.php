@@ -51,7 +51,7 @@ class PDF extends FPDF
                 $this->Cell(0, 22, "", 1);
                 $this->setY(40);
                 $this->setX(20);
-                $this->WriteHTML(utf8_decode(" NOMBRE COMPLETO:  <u>{$_POST['student_name']} {$_POST['student_surname']}</u>   <b>FECHA DE NACIMIENTO:</b> <u>{$_POST['date_birth']}</u>     <b>COBERTURA MÉDICA:</b> <u>{$_POST['medical_coverage']}</u>"));
+                $this->WriteHTML(utf8_decode(" NOMBRE COMPLETO:<u> {$_POST['student_name']} {$_POST['student_surname']}        </u><b>FECHA DE NACIMIENTO:</b><u> {$_POST['date_birth']}        </u><b>COBERTURA MÉDICA:</b><u> {$_POST['medical_coverage']}</u>"));
 
                 $this->setY(45);
                 $this->setX(20);

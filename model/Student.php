@@ -24,7 +24,7 @@ class Student
 
     function insert_student(&$student)
     {
-        #return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
+        return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
 
 
         try {
