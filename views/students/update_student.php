@@ -20,6 +20,13 @@ $studentController = new StudentController();
 if ($_POST) {
 
   $result = $studentController->update_student($_POST);
+
+  if ($result[0] == 1) {
+
+    
+    require_once ROOTPATH . '/utils/generate_pdf.php';
+    
+  } 
 }
 if (!$_GET['id']) {
   header('Location: ' . BASE_URL . 'views/students/students.php');
@@ -87,10 +94,7 @@ if (!$_GET['id']) {
           <div class="row mb-2">
             <div class="col-sm-6">
               <?php
-              if ($result[0] == 1) {
-                include ROOTPATH . '/common/alert_success.php';
-                unset($_POST);
-              } elseif ($result[0] == 2) {
+               if ($result[0] == 2) {
 
                 include ROOTPATH . '/common/alert_warning.php';
               } elseif ($result[0] == 3) {
@@ -178,7 +182,7 @@ if (!$_GET['id']) {
                             </div>
                             <div class="form-group">
                               <label for="exampleInputBorderWidth2">Email de padres</label>
-                              <input required name="parents_email" type="text" value="<?php echo $result['parents_email']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                              <input required name="email" type="text" value="<?php echo $result['email']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                             </div>
                           </div>
                         </div>

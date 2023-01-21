@@ -27,6 +27,10 @@ class PDF extends FPDF
                 $this->SetFont('Arial', 'B', 30);
                 $this->Cell(200, 10, "NatyRusso");
                 $this->Ln();
+                $this->setX(20);
+                $this->SetFont('Arial', 'B', 15);
+                $this->Cell(200, 10, "Alta de alumno");
+                $this->Ln();
 
                 $this->setY(7);
                 $this->SetFont('Arial', 'B', 10);
@@ -34,7 +38,7 @@ class PDF extends FPDF
                 $this->Cell(39, 6, "FECHA DE ALTA", 1, 0, 'C');
                 $this->setY(13);
                 $this->setX(165 - 5);
-                $this->Cell(39, 6, date('Y-m-d'), 1, 0, 'C');
+                $this->Cell(39, 6, date('d/m/Y'), 1, 0, 'C');
         }
 
 
@@ -48,21 +52,23 @@ class PDF extends FPDF
                 $this->setY(39);
                 $this->setX(20);
                 $this->SetFont('Arial', 'B', 9);
-                $this->Cell(0, 22, "", 1);
+                $this->Cell(0, 27, "", 1);
                 $this->setY(40);
                 $this->setX(20);
                 $this->WriteHTML(utf8_decode(" NOMBRE COMPLETO:<u> {$_POST['student_name']} {$_POST['student_surname']}        </u><b>FECHA DE NACIMIENTO:</b><u> {$_POST['date_birth']}        </u><b>COBERTURA MÉDICA:</b><u> {$_POST['medical_coverage']}</u>"));
 
                 $this->setY(45);
                 $this->setX(20);
-                $this->WriteHTML(utf8_decode(" <b>NOMBRE PADRE/TUTOR:</b> <u>{$_POST['father_name']}</u>      <b>NOMBRE MADRE/TUTORA:</b> <u>{$_POST['mother_name']}</u>     <b>N°AFILIADO:</b> <u>{$_POST['affiliate_number']}</u>"));
+                $this->WriteHTML(utf8_decode(" <b>NOMBRE PADRE/TUTOR:</b> <u>{$_POST['father_name']}      </u><b>NOMBRE MADRE/TUTORA:</b> <u>{$_POST['mother_name']}     </u><b>N°AFILIADO:</b> <u>{$_POST['affiliate_number']}</u>"));
                 $this->setY(50);
                 $this->setX(20);
-                $this->WriteHTML(utf8_decode(" <b>TELÉFONO PARTICULAR:</b> <u>{$_POST['private_number']}</u>  <b>NOMBRE DE CONTACTO DE URGENCIA:</b> <u>{$_POST['emergency_name']}</u>     <b>DOMICILIO:</b> <u>{$_POST['address']}</u>"));
-                $this->setY(53);
+                $this->WriteHTML(utf8_decode(" <b>TELÉFONO PARTICULAR:</b> <u>{$_POST['private_number']}  </u><b>NOMBRE DE CONTACTO DE URGENCIA:</b> <u>{$_POST['emergency_name']}</u>"));
+                $this->setY(55);
                 $this->setX(20);
-                $this->Cell(0, 10, utf8_decode(" EMAIL DE PADRES: {$_POST['email']}          NÚMERO DE CONTACTO DE URGENCIA: {$_POST['emergency_number']}"));
-                $this->setY(58);
+                $this->WriteHTML(utf8_decode(" <b>DOMICILIO:</b><u> {$_POST['address']}     </u><b>EMAIL DE PADRES:</b><u> {$_POST['email']}</u>"));
+                $this->setY(60);
+                $this->setX(20);
+                $this->WriteHTML(utf8_decode(" <b>NÚMERO DE CONTACTO DE URGENCIA:</b><u> {$_POST['emergency_number']}</u>"));
 
 
                 $this->SetFont('Arial', 'B', 16);
@@ -72,32 +78,33 @@ class PDF extends FPDF
                 $this->setY(78);
                 $this->setX(20);
                 $this->Cell(0, 13, "", 1);
-                $this->setY(77);
+                $this->setY(79);
                 $this->setX(20);
-                $this->SetFont('Arial', 'B', 8);
-                $this->Cell(0, 10, " Enfermedades:       Vacuna antitetanica:            Cuadro alergico: ");
-                $this->setY(82);
+                $this->SetFont('Arial', 'B', 9);
+                $this->WriteHTML(utf8_decode(" <b>ENFERMEDADES:</b>       <b>VACUNA ANTITETÁNICA:</b>            <b>CUADRO ALÉRGICO:</b> "));
+                $this->setY(84);
                 $this->setX(20);
-                $this->Cell(0, 10, " Cuadro alergico:     Quirurgia:            Dieta:          Internacion: ");
+                $this->WriteHTML(utf8_decode(" <b>QUIRURGIA:</b>            <b>DIETA:</b>          <b>INTERNACIÓN:<b> "));
                 $this->SetFont('Arial', 'B', 16);
                 $this->setY(100);
                 $this->setX(20);
                 $this->Cell(0, 10, "Firmas/Autorizaciones");
                 $this->setY(108);
                 $this->setX(20);
-                $this->Cell(0, 45, "", 1);
+                $this->Cell(0, 60, "", 1);
                 $this->setY(107);
                 $this->setX(20);
-                $this->SetFont('Arial', 'B', 8);
-                $this->setY(107);
+                $this->SetFont('Arial', 'B', 9);
+                $this->setY(109);
                 $this->setX(20);
-                $this->Cell(0, 10, utf8_decode(" ¿Autoriza a su hija/o a salir en fotos?:"));
-                $this->setY(112);
+                empty ($_POST['authorized']) ? $auth='No' : $auth='Si';
+                $this->WriteHTML(utf8_decode(" <b>¿AUTORIZA A SU HIJA/O A SALIR EN FOTOS?:</b><u> $auth</u>" ));
+                $this->setY(117);
                 $this->setX(20);
-                $this->Cell(0, 10, utf8_decode(" Firma y aclaración del mayor responsable:"));
-                $this->setY(132);
+                $this->WriteHTML(utf8_decode(" <b>FIRMA Y ACLARACIÓN DEL MAYOR ADULTO RESPONSABLE:</b>"));
+                $this->setY(137);
                 $this->setX(20);
-                $this->Cell(0, 10, utf8_decode(" Firma y sello del médico de cabecera:"));
+                $this->WriteHTML(utf8_decode(" <b>FIRMA Y SELLO DEL MÉDICO DE CABECERA:</b>"));
         }
 
         function WriteHTML($html)
@@ -178,9 +185,6 @@ class PDF extends FPDF
 
 $pdf = new PDF();
 $pdf->AddPage();
-// $pdf->Header();
 $pdf->ImprovedTable("hola");
+$pdf->Output("{$_POST['student_name']}_{$_POST['student_surname']}.pdf",'D');
 
-//echo $name;
-$pdf->Output();
-//print "<script>window.location=\"".$name."\";</script>";
