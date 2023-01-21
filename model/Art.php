@@ -42,13 +42,13 @@ class Art
                 FROM 
             " . $this->table_name . " a
             WHERE
-                a.name=:name
+                UPPER(a.name)=:name
             LIMIT 0,1
             ";
 
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(':name', trim($art['name']),T_STRING);
+            $stmt->bindParam(':name',strtoupper(trim($art['name'])),T_STRING);
 
             $stmt->execute();
 

@@ -15,12 +15,24 @@ SessionController::mustBeLoggedIn();
 
 $nav = 'ce';
 
+
+
 if (!empty($_POST)) {
 
   require_once ROOTPATH . '/controller/StudentController.php';
   $studentController = new StudentController();
   $result = $studentController->insert_student($_POST);
+
+  if ($result[0] == 1) {
+
+    
+    require_once ROOTPATH . '/utils/generate_pdf.php';
+    
+  } 
+  
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +42,7 @@ if (!empty($_POST)) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php echo HEAD; ?> | Alta alumno</title>
-  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
+  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
 
   <!-- Google Font: Source Sans Pro -->
@@ -78,11 +90,7 @@ if (!empty($_POST)) {
 
       <div class="content-header">
         <?php
-        if ($result[0] == 1) {
-
-          include ROOTPATH . '/common/alert_success.php';
-          unset($_POST);
-        } elseif ($result[0] == 2) {
+        if ($result[0] == 2) {
 
           include ROOTPATH . '/common/alert_warning.php';
         } elseif ($result[0] == 3) {
@@ -376,7 +384,7 @@ if (!empty($_POST)) {
 
     </div>
     <!-- /.content-wrapper -->
-
+    
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
 
@@ -455,6 +463,7 @@ if (!empty($_POST)) {
 
     })
   </script>
+  
 </body>
 
 </html>

@@ -94,4 +94,6 @@ class StudentController
 		$student = new Student($db);
 		return $student->get_students_birthdate();
 	}
+
+	
 }

@@ -42,14 +42,14 @@ class Activity
                 FROM 
             " . $this->table_name . " a
                 WHERE
-                a.name=:name
+                UPPER(a.name)=:name
             LIMIT 0,1
             ";
 
             
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(':name', trim($activity['name']),T_STRING);
+            $stmt->bindParam(':name', strtoupper(trim($activity['name'])),T_STRING);
 
             $stmt->execute();
 

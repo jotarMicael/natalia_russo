@@ -24,6 +24,7 @@ class Student
 
     function insert_student(&$student)
     {
+        #return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
 
 
         try {
@@ -630,4 +631,6 @@ class Student
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
     }
+
+    
 }

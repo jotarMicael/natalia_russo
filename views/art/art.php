@@ -31,7 +31,7 @@ if (!empty($_POST)) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo HEAD; ?> | ART</title>
-    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
+    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 

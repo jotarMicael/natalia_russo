@@ -35,7 +35,7 @@ if (!$_GET['id']) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php echo HEAD; ?> | Actualizar alumno</title>
-  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/dance.png">
+  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
 
   <!-- Google Font: Source Sans Pro -->
