@@ -20,4 +20,16 @@ class SocialWorkController
 		
 	}
 
+	function get_only_social_work(&$id){
+
+		$database = new Database();
+		$db = $database->getConnection();
+
+		$social_work = new SocialWork($db);
+
+
+        return $social_work->get_only_social_work($id);
+
+	}
+
 }

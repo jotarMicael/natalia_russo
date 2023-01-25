@@ -26,7 +26,7 @@ if (!empty($_POST)) {
   if ($result[0] == 1) {
 
     
-    require_once ROOTPATH . '/utils/generate_pdf.php';
+    require_once ROOTPATH . '/utils/edit_pdf.php';
     
   } 
   
@@ -232,6 +232,12 @@ if (!empty($_POST)) {
                               <span class="input-group-text"><i class="fas fa-phone"></i></span>
                             </div>
                             <input required name="emergency_number" value="<?php echo $_POST ? $_POST['emergency_number'] : ''; ?>" type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" <?php echo $_POST['changed'] ? 'checked' : ''; ?> id="changed" name="changed" value="1">
+                            <label for="changed" class="custom-control-label">¿Autoriza a que el niño sea cambiado por el docente en caso de ser necesario?</label>
                           </div>
                         </div>
                         

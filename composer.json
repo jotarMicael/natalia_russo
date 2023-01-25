@@ -21,5 +21,9 @@
   "license": "MIT",
   "support": {
     "issues": "https://github.com/ColorlibHQ/AdminLTE/issues"
+  },
+  "require": {
+    "nesbot/carbon": "^2.65",
+    "setasign/fpdi": "^2.0"
   }
 }

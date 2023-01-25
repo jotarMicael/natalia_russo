@@ -24,7 +24,7 @@ class Student
 
     function insert_student(&$student)
     {
-
+        
         try {
             $student['student_name'] = trim($student['student_name']);
             $student['student_surname'] = trim($student['student_surname']);
@@ -115,9 +115,10 @@ class Student
             parents_email,
             social_work_id,
             afiliate_number,
-            authorized " . $insert . ")
+            authorized,
+            changed " . $insert . ")
             VALUES
-            ('{$student['student_name']}','{$student['student_surname']}','" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "','{$student['father_name']}','{$student['mother_name']}','{$student['private_number']}','{$student['emergency_number']}','{$student['emergency_name']}','{$student['address']}','{$student['email']}',{$student['medical_coverage']},'{$student['affiliate_number']}'," . (empty($student['authorized']) ? 0 : 1) .  $values . " );
+            ('{$student['student_name']}','{$student['student_surname']}','" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "','{$student['father_name']}','{$student['mother_name']}','{$student['private_number']}','{$student['emergency_number']}','{$student['emergency_name']}','{$student['address']}','{$student['email']}',{$student['medical_coverage']},'{$student['affiliate_number']}'," . (empty($student['authorized']) ? 0 : 1) . ',' . (empty($student['changed']) ? 0 : 1) .  $values . " );
         ";
 
 
@@ -476,7 +477,7 @@ class Student
     {
 
         try {
-            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,
+            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.emergency_name AS emergency_name,s.changed as changed,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,
             GROUP_CONCAT(sd.disease_id) AS diseases 
             FROM " . $this->table_name . " s 
             INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
@@ -539,7 +540,7 @@ class Student
             $student['affiliate_number'] = trim($student['affiliate_number']);
 
 
-            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number'])) {
+            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['father_name']) || empty($student['mother_name']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['emergency_name']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number'])) {
 
                 return array(4, '<div class="invalid-feedback d-block">Todos los campos de esta sección deben completarse*</div>');
             }
@@ -629,7 +630,7 @@ class Student
             $query = "UPDATE " . $this->table_name . " s
             SET 
                 s.name='{$student['student_name']}',s.surname='{$student['student_surname']}',s.birth_date='" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "',
-                s.father_name='{$student['father_name']}',s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.address='{$student['address']}',s.authorized=" . (empty($student['authorized']) ? 0 : 1) . ",s.parents_email='{$student['email']}',s.social_work_id={$student['medical_coverage']},
+                s.father_name='{$student['father_name']}',s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.emergency_name='{$student['emergency_name']}',s.address='{$student['address']}',s.authorized=" . (empty($student['authorized']) ? 0 : 1) . ",s.parents_email='{$student['email']}',s.social_work_id={$student['medical_coverage']},
                 s.afiliate_number='{$student['affiliate_number']}'" . $insert . "
             WHERE 
                 s.id={$student['id']}
