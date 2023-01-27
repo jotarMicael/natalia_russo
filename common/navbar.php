@@ -47,11 +47,17 @@
             <p> Alumnos <i class=" fas fa-angle-left right"></i></p>
           </a>
 
-          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce', 'aa')) ? 'block' : 'none'; ?>;">
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce', 'aa','cae')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/students/create_student.php" class="nav-link <?php echo $nav == 'ce' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
-                <p>Alta de alumno</p>
+                <p>Alta de niño/a</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo BASE_URL; ?>views/students/create_adult_student.php" class="nav-link <?php echo $nav == 'cae' ? 'bg-orange' : ''; ?>">
+                <i class="nav-icon fas fa-user"></i>
+                <p>Alta de adulto</p>
               </a>
             </li>
             <li class="nav-item">

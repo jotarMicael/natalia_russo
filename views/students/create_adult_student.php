@@ -13,7 +13,7 @@ require_once '../../utils/const.php';
 require_once ROOTPATH . '/controller/SessionController.php';
 SessionController::mustBeLoggedIn();
 
-$nav = 'ce';
+$nav = 'cae';
 
 
 
@@ -25,11 +25,9 @@ if (!empty($_POST)) {
 
   if ($result[0] == 1) {
 
-    
+
     require_once ROOTPATH . '/utils/edit_pdf.php';
-    
-  } 
-  
+  }
 }
 
 
@@ -41,7 +39,7 @@ if (!empty($_POST)) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?php echo HEAD; ?> | Alta niño/a</title>
+  <title><?php echo HEAD; ?> | Alta adulto</title>
   <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
 
@@ -143,46 +141,19 @@ if (!empty($_POST)) {
                             <label for="exampleInputBorderWidth2">N° afiliado</label>
                             <input required value="<?php echo $_POST ? $_POST['affiliate_number'] : ''; ?>" name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
-                          <div class="form-group">
-                            <label for="exampleInputBorderWidth2">Domicilio</label>
-                            <input required name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                          </div>
 
-                          <div class="form-group">
-                                                        <label>Actividades</label>
-                                                        <div class="select2-maroon">
-                                                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                                <?php
-                                                                require_once ROOTPATH . '/controller/ActivityController.php';
-                                                                $activityController = new ActivityController();
-                                                                if ($_POST['activities']) {
-                                                                    foreach ($activityController->get_activities() as $activity) {
-                                                                ?>
-                                                                        <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                                                    <?php }
-                                                                } else {
-                                                                    foreach ($activityController->get_activities() as $activity) { ?>
-                                                                        <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+
+                          
 
                       </div>
-                      
+
                       <div class="col-4">
                         <div class="form-group">
                           <div class="form-group">
                             <label for="exampleInputBorderWidth2">Apellido/s</label>
                             <input required name="student_surname" type="text" value="<?php echo $_POST ? $_POST['student_surname'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
-                          <div class="form-group">
-                            <label for="exampleInputBorderWidth2">Nombre de padre o tutor</label>
-                            <input required name="father_name" value="<?php echo $_POST ? $_POST['father_name'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                          </div>
+
                           <div class="form-group">
                             <label>Teléfono particular</label>
 
@@ -194,16 +165,32 @@ if (!empty($_POST)) {
                             </div>
                           </div>
                           <div class="form-group">
-                            <label for="exampleInputBorderWidth2">Email de padres</label>
+                            <label for="exampleInputBorderWidth2">Email personal</label>
                             <input required name="email" type="text" value="<?php echo $_POST ? $_POST['email'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
                         </div>
                         <div class="form-group">
-                          <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" <?php echo $_POST['authorized'] ? 'checked' : ''; ?> id="authorized" name="authorized" value="1">
-                            <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
+                            <label>Actividades</label>
+                            <div class="select2-maroon">
+                              <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <?php
+                                require_once ROOTPATH . '/controller/ActivityController.php';
+                                $activityController = new ActivityController();
+                                if ($_POST['activities']) {
+                                  foreach ($activityController->get_activities() as $activity) {
+                                ?>
+                                    <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                  <?php }
+                                } else {
+                                  foreach ($activityController->get_activities() as $activity) { ?>
+                                    <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                  <?php
+                                  }
+                                  ?>
+                                <?php } ?>
+                              </select>
+                            </div>
                           </div>
-                        </div>
                       </div>
                       <div class="col-4">
                         <div class="form-group">
@@ -216,10 +203,7 @@ if (!empty($_POST)) {
                           </div>
                           <!-- /.input group -->
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Nombre de madre o tutor</label>
-                          <input required name="mother_name" value="<?php echo $_POST ? $_POST['mother_name'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
+
                         <div class="form-group">
                           <label>Nombre de contacto de urgencia</label>
 
@@ -239,12 +223,10 @@ if (!empty($_POST)) {
                           </div>
                         </div>
                         <div class="form-group">
-                          <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" <?php echo $_POST['changed'] ? 'checked' : ''; ?> id="changed" name="changed" value="1">
-                            <label for="changed" class="custom-control-label">¿Autoriza a que el niño sea cambiado por el docente en caso de ser necesario?</label>
-                          </div>
+                          <label for="exampleInputBorderWidth2">Domicilio</label>
+                          <input required name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                         </div>
-                        
+
                       </div>
                     </div>
                     <?php
@@ -394,7 +376,7 @@ if (!empty($_POST)) {
 
     </div>
     <!-- /.content-wrapper -->
-    
+
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
 
@@ -473,7 +455,7 @@ if (!empty($_POST)) {
 
     })
   </script>
-  
+
 </body>
 
 </html>

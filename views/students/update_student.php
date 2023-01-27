@@ -134,7 +134,10 @@ if (!$_GET['id']) {
                               <input required name="student_name" type="text" value="<?php echo $result['student_name']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                             </div>
 
-
+                            <div class="form-group">
+                              <label for="exampleInputBorderWidth2">DNI</label>
+                              <input required value="<?php echo $result ? $result['dni'] : ''; ?>" name="dni" type="number" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                            </div>
 
                             <div class="form-group">
                               <label for="exampleSelectBorderWidth2">Cobertura médica</label>
@@ -184,11 +187,11 @@ if (!$_GET['id']) {
                               <input required name="email" type="text" value="<?php echo $result['email']; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                             </div>
                             <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                              <input class="custom-control-input" type="checkbox" id="authorized" name="authorized" <?= (bool)$result['authorized'] ? ' checked="checked"' : '' ?> value="1">
-                              <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
+                              <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="authorized" name="authorized" <?= (bool)$result['authorized'] ? ' checked="checked"' : '' ?> value="1">
+                                <label for="authorized" class="custom-control-label">¿Autoriza a que su hija/o aparezca en fotos?</label>
+                              </div>
                             </div>
-                          </div>
                           </div>
                         </div>
                         <div class="col-4">
@@ -227,14 +230,14 @@ if (!$_GET['id']) {
 
 
 
-                          
+
 
                           <div class="form-group">
-                          <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" <?= (bool)$result['changed'] ? ' checked="checked"' : '' ?>  id="changed" name="changed" value="1">
-                            <label for="changed" class="custom-control-label">¿Autoriza a que el niño sea cambiado por el docente en caso de ser necesario?</label>
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input" type="checkbox" <?= (bool)$result['changed'] ? ' checked="checked"' : '' ?> id="changed" name="changed" value="1">
+                              <label for="changed" class="custom-control-label">¿Autoriza a que el niño sea cambiado por el docente en caso de ser necesario?</label>
+                            </div>
                           </div>
-                        </div>
                         </div>
                       </div><?php
                             if ($error) {
