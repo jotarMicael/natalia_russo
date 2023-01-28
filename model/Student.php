@@ -12,6 +12,8 @@ class Student
     private $table_name4 = "students_share";
     private $table_name5 = "diseases";
     private $table_name6 = "students_activities";
+    private $table_name7 = "students_medical_history";
+    private $table_name8 = "medical_history";
 
     public function __construct($db = null)
     {
@@ -24,7 +26,7 @@ class Student
 
     function insert_student(&$student)
     {
-        return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
+        //return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
         try {
             $student['student_name'] = trim($student['student_name']);
             $student['student_surname'] = trim($student['student_surname']);
@@ -42,14 +44,13 @@ class Student
 
             $query = " SELECT s.id FROM " . $this->table_name . " s 
             WHERE
-                s.name=:name and s.surname=:surname
+                s.dni=:dni
             LIMIT 0,1
             ";
 
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(":name", $student['student_name']);
-            $stmt->bindParam(":surname", $student['student_surname']);
+            $stmt->bindParam(":dni", $student['dni']);
 
             $stmt->execute();
 
@@ -186,10 +187,143 @@ class Student
         }
     }
 
+    function insert_adult_student(&$student)
+    {
+        //return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
+
+        try {
+            $student['student_name'] = trim($student['student_name']);
+            $student['student_surname'] = trim($student['student_surname']);
+            $student['emergency_name'] = trim($student['emergency_name']);
+            $student['address'] = trim($student['address']);
+            $student['email'] = trim($student['email']);
+            $student['affiliate_number'] = trim($student['affiliate_number']);
+
+            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['private_number']) || empty($student['emergency_number']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) || empty($student['emergency_name']) || empty($student['activities']) || empty($student['dni']) || empty($student['weight']) || empty($student['address']) || empty($student['email']) || empty($student['medical_coverage']) || empty($student['affiliate_number']) || empty($student['emergency_name']) || empty($student['activities']) || empty($student['dni']) || ($student['physical_aptitude'] == 0)) {
+                return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
+            }
+
+
+            $query = " SELECT s.id FROM " . $this->table_name . " s 
+            WHERE
+                s.dni=:dni
+            LIMIT 0,1
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(":dni", $student['dni']);
+
+
+            $stmt->execute();
+
+
+            if (!empty($stmt->fetch(PDO::FETCH_ASSOC))) {
+                return array(2, 'El alumno <strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ya se encuentra registrado en el sistema');
+            }
+
+            $insert = '';
+            $values = '';
+
+
+            if (!empty($student['medication'])) {
+                $insert .= ',medication';
+                $values .= ",'" . $student['medication'] . "'";
+            }
+
+            if (!empty($student['pathologies'])) {
+                $insert .= ',other_disease_1';
+                $values .= ",'" . $student['pathologies'] . "'";
+            }
+
+
+            if (!empty($student['allergy'])) {
+                $insert .= ',allergy';
+                $values .= ",'" . $student['allergy'] . "'";
+            }
+
+            $query = "INSERT INTO " . $this->table_name . " 
+            (
+            name,
+            surname,
+            birth_date,
+            private_phone_number,
+            emergency_phone_number,
+            emergency_name,
+            address,
+            parents_email,
+            social_work_id,
+            afiliate_number,
+            dni,
+            internal,
+            type
+             " . $insert . ")
+            VALUES
+            ('{$student['student_name']}','{$student['student_surname']}','" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "','{$student['private_number']}','{$student['emergency_number']}','{$student['emergency_name']}','{$student['address']}','{$student['email']}',{$student['medical_coverage']},'{$student['affiliate_number']}',{$student['dni']},'{$student['weight']}',1 " .  $values . " );
+        ";
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            $id = $this->conn->lastInsertId();
+
+            if (!empty($student['medical_history'])) {
+                $had_medical_history = [];
+                foreach ($student['medical_history'] as $medical_history) {
+                    $had_medical_history[] = "($id,$medical_history)";
+                }
+
+                $query = "INSERT INTO " . $this->table_name7 . " 
+                        (student_id,medical_history_id)
+                        VALUES
+                        " . implode(",", $had_medical_history) . ";
+                ";
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->execute();
+            }
+
+            $query = "INSERT INTO " . $this->table_name7 . " 
+                        (student_id,medical_history_id,count)
+                        VALUES
+                        ($id,27,{$student['physical_aptitude']});
+                ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+
+            $activities = [];
+            foreach ($student['activities'] as $activity) {
+                $activities[] = "($id,$activity)";
+            }
+
+            $query = "INSERT INTO " . $this->table_name6 . " 
+                        (student_id,activity_id)
+                        VALUES
+                        " . implode(",", $activities) . ";
+                ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+
+            return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+
     function get_all_student_actives()
     {
         try {
-            $query = " SELECT * FROM " . $this->table_name . " s 
+            $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,s.address,s.private_phone_number FROM " . $this->table_name . " s 
             WHERE s.active=1
         ";
 
@@ -249,6 +383,96 @@ class Student
             $stmt->execute();
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+    function get_technical_sheet(&$student_id, &$student_type)
+    {
+
+        try {
+            if (!$student_type) {
+                $query = " SELECT s.id,
+                        s.type as type,
+                        s.name as student_name,
+                        s.surname as student_surname,
+                        s.birth_date as date_birth,
+                        s.father_name,
+                        s.mother_name,
+                        s.private_phone_number as private_number,
+                        s.emergency_phone_number as emergency_number,
+                        s.emergency_name,
+                        s.address,
+                        s.parents_email as email,
+                        s.social_work_id as medical_coverage,
+                        s.afiliate_number as affiliate_number,
+                        s.other_disease_1,
+                        s.other_disease_2,
+                        s.internal as internated,
+                        s.surgery,
+                        s.medication,
+                        s.tetanus_vaccine as antitetano,
+                        s.diet,
+                        s.allergy,
+                        s.changed,
+                        s.authorized,
+                        (SELECT GROUP_CONCAT(d.id)  FROM  " . $this->table_name2 . " sd
+                        INNER JOIN " . $this->table_name5 . " d ON (sd.disease_id=d.id)
+                        WHERE d.type=1 and sd.student_id = s.id ) AS diseases,
+                        (SELECT GROUP_CONCAT(d.id)  FROM  " . $this->table_name2 . " sd
+                        INNER JOIN " . $this->table_name5 . " d ON (sd.disease_id=d.id)
+                        WHERE d.type=0 and sd.student_id = s.id ) AS had_disease
+                        FROM " . $this->table_name . " s          
+                        WHERE s.id=:id and s.active=1
+                        GROUP BY s.id
+                        LIMIT 0,1
+                ";
+
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->bindParam(':id', $student_id);
+                $stmt->execute();
+
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $student['diseases'] = explode(',', $student['diseases']);
+                $student['had_disease'] = explode(',', $student['had_disease']);
+            } else {
+
+                $query = " SELECT s.id,
+                                s.type as type,
+                                s.name as student_name,
+                                s.surname as student_surname,
+                                s.birth_date as date_birth,
+                                s.private_phone_number as private_number,
+                                s.other_disease_1 as pathologies,
+                                s.internal as weight,
+                                s.medication as medication,
+                                s.allergy as allergy,
+                                (SELECT GROUP_CONCAT(mh.id)  FROM  " . $this->table_name7 . " smh
+                                INNER JOIN " . $this->table_name8 . " mh ON (smh.medical_history_id=mh.id)
+                                WHERE mh.id<>27 and smh.student_id = s.id ) AS medical_history,
+                                (SELECT smh.count  FROM  " . $this->table_name7 . " smh
+                                WHERE smh.medical_history_id=27 and smh.student_id = s.id LIMIT 1) AS physical_aptitude
+                                FROM " . $this->table_name . " s          
+                                WHERE s.id=:id and s.active=1
+                                GROUP BY s.id
+                                LIMIT 0,1
+                ";
+
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->bindParam(':id', $student_id);
+                $stmt->execute();
+
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+                $student['medical_history'] = explode(',', $student['medical_history']);
+            }
+
+            return  $student;
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
@@ -323,7 +547,7 @@ class Student
         $pdf->setY(12);
         $pdf->setX(10);
         // Agregamos los datos de la empresa
-        $pdf->Cell(5, $textypos, "Estudio de danza: Natalia Russo");
+        $pdf->Cell(5, $textypos, "Estudio de danza: ".SYSTEM_NAME);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->setY(30);
         $pdf->setX(10);
@@ -351,7 +575,7 @@ class Student
         $pdf->Cell(5, $textypos, 'Numero tel.: ' . $share['private_phone_number']);
         $pdf->setY(50);
         $pdf->setX(65);
-        $pdf->Cell(5, $textypos, 'Email padres: ' . $share['parents_email']);
+        $pdf->Cell(5, $textypos, 'Email: ' . $share['parents_email']);
 
         // Agregamos los datos del cliente
         $pdf->SetFont('Arial', 'B', 10);
@@ -502,7 +726,7 @@ class Student
             }
             return $student;
 
-            return array(1, 'Alumno eliminado correctamente');
+            
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }

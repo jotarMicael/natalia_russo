@@ -20,6 +20,15 @@ if (!empty($_POST)) {
   $studentController = new StudentController();
   if (!empty($_POST['delete_id'])) {
     $result = $studentController->delete_student($_POST['delete_id']);
+  } elseif (!empty($_POST['student_id'])) {
+    $_POST = $studentController->get_technical_sheet($_POST['student_id'], $_POST['student_type']);
+
+    if (!$_POST['type']) {
+
+      require_once '../../utils/edit_pdf.php';
+    } else {
+      require_once '../../utils/edit_adult_pdf.php';
+    }
   }
 }
 ?>
@@ -96,7 +105,7 @@ if (!empty($_POST)) {
                       <tr>
                         <th>Nombre</th>
                         <th>Apellido</th>
-                        <th>Fecha nacimiento</th>
+                        <th>DNI</th>
                         <th>Dirección</th>
                         <th>Número privado</th>
                         <th>Acciones</th>
@@ -105,27 +114,42 @@ if (!empty($_POST)) {
                     <tbody>
                       <?php require_once ROOTPATH . '/controller/StudentController.php';
                       $studentController = new StudentController();
-                      foreach ($studentController->get_all_student_actives() as $student) { ?>
-                        <tr>
-                          <td><?php echo $student['name'] ?>&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" href='<?php echo BASE_URL ?>views/students/view_student.php?id=<?php echo $student["id"] ?>'>
+                      /*&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-sm" href='<?php //echo BASE_URL ?>views/students/view_student.php?id=<?php //echo $student["id"] ?>'>
                               <i class="fas fa-eye"></i>
                               </i>
-                            </a></td>
+                            </a>*/
+                      foreach ($studentController->get_all_student_actives() as $student) { ?>
+                        <tr>
+                          <td><?php echo $student['name'] ?>
+
+
+                          </td>
                           <td><?php echo $student['surname'] ?></td>
-                          <td class="text-right"><?php echo $student['birth_date'] ?></td>
+                          <td><?php echo $student['dni'] ?></td>
                           <td><?php echo $student['address'] ?></td>
                           <td><?php echo $student['private_phone_number'] ?></td>
                           <td class="project-actions text-center">
+                            <a onclick="open_technical_sheet('<?= $student['id'] ?>','<?= $student['type'] ?>');" type="button" class="btn btn-sm bg-danger ">
+                              <i class="fas fa-file-pdf">
+
+                              </i>
+                              Ficha
+                            </a>
+                            <a type="button" href="<?php echo BASE_URL; ?>views/students/pay_social_fee.php?id=<?php echo $student['id'] ?>" class="btn btn-sm bg-success">
+                              <i class="fas fa-money-check-alt">
+                              </i>
+                              Abonar
+                            </a>
                             <a onclick="return confirm('<?php echo BASE_URL ?>views/students/update_student.php?id=<?php echo $student['id'] ?>',true);" class="btn btn-info btn-sm">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Editar
                             </a>
-                            <a onclick="return send_delete_id('<?php echo $student['id'] ?>');" class="btn btn-danger btn-sm" href="#">
+                            <!--<a onclick="return send_delete_id('<?php echo $student['id'] ?>');" class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
                               Borrar
-                            </a>
+                            </a>-->
                           </td>
                         </tr>
                       <?php } ?>
@@ -144,6 +168,10 @@ if (!empty($_POST)) {
       </section>
       <form id="delete_student" method="post">
         <input id="delete_id" name="delete_id" type="hidden" id=''>
+      </form>
+      <form id="technical_sheet" method="post">
+        <input id="student_id" name="student_id" type="hidden" id=''>
+        <input id="student_type" name="student_type" type="hidden" id=''>
       </form>
     </div>
 
@@ -179,7 +207,13 @@ if (!empty($_POST)) {
   <script>
     function send_delete_id(id) {
       $('#delete_id').val(id);
-      return confirm('#delete_student',false);
+      return confirm('#delete_student', false);
+    }
+
+    function open_technical_sheet(id, type) {
+      $('#student_id').val(id);
+      $('#student_type').val(type);
+      $('#technical_sheet').submit();
     }
   </script>
 </body>

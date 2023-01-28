@@ -189,12 +189,16 @@ if (!empty($_POST)) {
                   <?php } ?>
                 </div>
                 <!-- /.card-body -->
+                
               </div>
 
 
             </div>
+          
           </div>
+          
         </div>
+        <div class="col-2 mb-2"><a type="button" href="<?php echo BASE_URL; ?>views/students/students.php" class="btn btn-block bg-maroon btn-sm"><i class="fas fa-arrow-left"></i>Volver</a></div>
       </section>
       <form id="pdf" method="post">
         <input id="share_id" name="share_id" type="hidden" id=''>
@@ -206,38 +210,9 @@ if (!empty($_POST)) {
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
   </div>
-  <!-- ./wrapper -->
-
-  <!-- jQuery -->
   <script src="<?php echo BASE_URL; ?>/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo BASE_URL; ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- bs-custom-file-input -->
-  <script src="<?php echo BASE_URL; ?>/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-  <!-- AdminLTE App -->
-  <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
-  <!-- AdminLTE for demo purposes -->
-  <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
-
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables/jquery.dataTables.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/jszip/jszip.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/pdfmake/pdfmake.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/pdfmake/vfs_fonts.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
-  <!-- Page specific script -->
-  <script src="<?php echo BASE_URL; ?>/plugins/jquery/jquery.min.js"></script>
-
-  <script src="<?php echo BASE_URL; ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js?v=3.2.0"></script>
   <!-- DataTables  & Plugins -->
   <script src="<?php echo BASE_URL; ?>/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -251,15 +226,17 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
-  <!-- InputMask -->
+
   <script src="<?php echo BASE_URL; ?>/plugins/select2/js/select2.full.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/moment/moment.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/inputmask/jquery.inputmask.min.js"></script>
-  <!-- date-range-picker -->
+  <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
-  <script src="<?php echo BASE_URL; ?>/plugins/daterangepicker/daterangepicker.js"></script>
+
+
+
 
   <!-- Page specific script -->
   <script>

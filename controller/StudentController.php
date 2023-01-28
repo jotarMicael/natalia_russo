@@ -43,6 +43,17 @@ class StudentController
 		return $student->get_information_student($student_id);
 	}
 
+	function get_technical_sheet(&$student_id,&$student_type)
+	{
+		$database = new Database();
+		$db = $database->getConnection();
+
+		$student = new Student($db);
+
+
+		return $student->get_technical_sheet($student_id,$student_type);
+	}
+
 	function pay_social_fee(&$student_id, $share_date, &$import)
 	{
 
@@ -94,6 +105,20 @@ class StudentController
 		$student = new Student($db);
 		return $student->get_students_birthdate();
 	}
+
+	function insert_adult_student(&$student_)
+	{
+
+
+		$database = new Database();
+		$db = $database->getConnection();
+
+		$student = new Student($db);
+
+
+		return $student->insert_adult_student($student_);
+	}
+
 
 	
 }

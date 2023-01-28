@@ -21,12 +21,12 @@ if (!empty($_POST)) {
 
   require_once ROOTPATH . '/controller/StudentController.php';
   $studentController = new StudentController();
-  $result = $studentController->insert_student($_POST);
+  $result = $studentController->insert_adult_student($_POST);
 
   if ($result[0] == 1) {
 
 
-    require_once ROOTPATH . '/utils/edit_pdf.php';
+    require_once ROOTPATH . '/utils/edit_adult_pdf.php';
   }
 }
 
@@ -122,8 +122,10 @@ if (!empty($_POST)) {
                             <label for="exampleInputBorderWidth2">DNI</label>
                             <input required value="<?php echo $_POST ? $_POST['dni'] : ''; ?>" name="dni" type="number" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
-
-
+                          <div class="form-group">
+                            <label for="exampleInputBorderWidth2">Peso</label>
+                            <input required value="<?php echo $_POST ? $_POST['weight'] : ''; ?>" name="weight" type="number" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                          </div>
                           <div class="form-group">
                             <label for="exampleSelectBorderWidth2">Cobertura médica</label>
 
@@ -141,9 +143,11 @@ if (!empty($_POST)) {
                             <label for="exampleInputBorderWidth2">N° afiliado</label>
                             <input required value="<?php echo $_POST ? $_POST['affiliate_number'] : ''; ?>" name="affiliate_number" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                           </div>
+                          <div class="form-group">
+                            <label for="exampleInputBorderWidth2">Medicación</label>
+                            <input name="medication" type="text" value="<?php echo $_POST ? $_POST['medication'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                          </div>
 
-
-                          
 
                       </div>
 
@@ -170,27 +174,31 @@ if (!empty($_POST)) {
                           </div>
                         </div>
                         <div class="form-group">
-                            <label>Actividades</label>
-                            <div class="select2-maroon">
-                              <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                          <label>Actividades</label>
+                          <div class="select2-maroon">
+                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                              <?php
+                              require_once ROOTPATH . '/controller/ActivityController.php';
+                              $activityController = new ActivityController();
+                              if ($_POST['activities']) {
+                                foreach ($activityController->get_activities() as $activity) {
+                              ?>
+                                  <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                <?php }
+                              } else {
+                                foreach ($activityController->get_activities() as $activity) { ?>
+                                  <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
                                 <?php
-                                require_once ROOTPATH . '/controller/ActivityController.php';
-                                $activityController = new ActivityController();
-                                if ($_POST['activities']) {
-                                  foreach ($activityController->get_activities() as $activity) {
+                                }
                                 ?>
-                                    <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                  <?php }
-                                } else {
-                                  foreach ($activityController->get_activities() as $activity) { ?>
-                                    <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                  <?php
-                                  }
-                                  ?>
-                                <?php } ?>
-                              </select>
-                            </div>
+                              <?php } ?>
+                            </select>
                           </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputBorderWidth2">Patologías</label>
+                          <input name="pathologies" type="text" value="<?php echo $_POST ? $_POST['pathologies'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        </div>
                       </div>
                       <div class="col-4">
                         <div class="form-group">
@@ -226,7 +234,10 @@ if (!empty($_POST)) {
                           <label for="exampleInputBorderWidth2">Domicilio</label>
                           <input required name="address" value="<?php echo $_POST ? $_POST['address'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
                         </div>
-
+                        <div class="form-group">
+                          <label for="exampleInputBorderWidth2">Alergias</label>
+                          <input name="allergy" type="text" value="<?php echo $_POST ? $_POST['allergy'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
+                        </div>
                       </div>
                     </div>
                     <?php
@@ -246,119 +257,54 @@ if (!empty($_POST)) {
                   <div class="container">
                     <div class="row justify-content-around">
                       <div class="col-4">
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">¿Ha padecido alguna de las siguientes enfermedades?</label>
-
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <?php require_once ROOTPATH . '/controller/DiseaseController.php';
-                              $diseaseController = new DiseaseController();
-                              $diseases = $diseaseController->get_diseases(0);
-                              foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                            <div class="col-sm-6">
-
-                              <?php
-                              foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="had_disease[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
+                        <?php require_once '../../controller/MedicalHistoryController.php';
+                        $medicalHistoryController = new MedicalHistoryController();
+                        $mh = $medicalHistoryController->get_medical_history();
+                        foreach (array_slice($mh, 0, 9)  as $medical_history) {
+                        ?>
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
                             </div>
                           </div>
-
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                          <input name="other_diseases_1" value="<?php echo $_POST ? $_POST['other_diseases_1'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
-                        <div class="form-group">
-
-                          <label for="exampleInputBorderWidth2">¿Padece alguna de las siguientes enfermedades?</label>
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <?php
-                              $diseases = $diseaseController->get_diseases(1);
-
-                              foreach (array_slice($diseases, 0, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                            <div class="col-sm-6">
-
-                              <?php
-                              foreach (array_slice($diseases, count($diseases) / 2) as $disease) {
-                              ?>
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" name="diseases[]" id="<?php echo $disease['id']; ?>" value="<?php echo $disease['id']; ?>">
-                                  <label for="<?php echo $disease['id']; ?>" class="custom-control-label"><?php echo $disease['name']; ?></label>
-                                </div>
-
-                              <?php } ?>
-
-                            </div>
-                          </div>
-
-
-
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">Otra/s enfermedades:</label>
-                          <input name="other_diseases_2" value="<?php echo $_POST ? $_POST['other_diseases_2'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="...">
-                        </div>
+                        <?php } ?>
                       </div>
                       <div class="col-4">
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">¿Tiene vacuna antitetánica?:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-
-                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        <?php
+                        foreach (array_slice($mh, 9, 9)  as $medical_history) {
+                        ?>
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
                             </div>
-                            <input placeholder="Fecha,complete en caso afirmativo" name="antitetano" value="<?php echo $_POST ? $_POST['antitetano'] : ''; ?>" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                           </div>
-                        </div>
-                        <div class="form-group"><label for="exampleInputBorderWidth2">¿Presenta algún cuadro alérgico?:</label>
-                          <input name="allergy" value="<?php echo $_POST ? $_POST['allergy'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">¿Fué intervenido quirúrgicamente?:</label>
-                          <input name="surgery" type="text" value="<?php echo $_POST ? $_POST['surgery'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
-                        </div>
-                        <div class="form-group"><label for="exampleInputBorderWidth2">¿Mantiene alguna dieta especial?:</label>
-                          <input name="diet" type="text" value="<?php echo $_POST ? $_POST['diet'] : ''; ?>" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputBorderWidth2">¿Estuvo alguna vez internado?:</label>
-                          <input name="internated" value="<?php echo $_POST ? $_POST['internated'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Diagnóstico?,complete en caso afirmativo">
-                          <!-- /.input group -->
-                        </div>
+                        <?php } ?>
                       </div>
                       <div class="col-4">
-
+                        <?php
+                        foreach (array_slice($mh, 18, 8)  as $medical_history) {
+                        ?>
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
+                            </div>
+                          </div>
+                        <?php } ?>
                         <div class="form-group">
-                          <label for="exampleInputBorderWidth2">¿Toma alguna medicación?:</label>
-                          <input name="medication" value="<?php echo $_POST ? $_POST['medication'] : ''; ?>" type="text" class="form-control form-control-border border-width-2" id="exampleInputBorderWidth2" placeholder="¿Cuál?,complete en caso afirmativo">
-                        </div>
+                          <label for="exampleSelectBorderWidth2">Del 1 al 10 como considera su aptitud física</label>
 
+                          <select required name="physical_aptitude" class="custom-select form-control-border border-width-2" id="exampleSelectBorderWidth2">
+                            <option value="0">Ninguna</option>
+                            <?php 
+                            for ($i=1; $i<=10;$i++) {
+                            ?>
+                              <option <?= $_POST['physical_aptitude'] == $i ? ' selected="selected"' : ''; ?> value="<?= $i ?>"><?= $i ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
