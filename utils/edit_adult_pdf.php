@@ -1,15 +1,9 @@
 <?php
+
 require_once 'const.php';
 include  ROOTPATH . "/fpdf/fpdf.php";
 require_once(ROOTPATH . '/vendor/autoload.php');
-
-function get_age($fecha_nacimiento)
-{
-    $nacimiento = new DateTime($fecha_nacimiento);
-    $ahora = new DateTime(date("Y-m-d"));
-    $diferencia = $ahora->diff($nacimiento);
-    return $diferencia->format("%y");
-}
+require_once 'get_age.php';
 
 use setasign\Fpdi\Fpdi;
 
