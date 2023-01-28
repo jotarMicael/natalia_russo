@@ -25,11 +25,9 @@ if (!empty($_POST)) {
 
   if ($result[0] == 1) {
 
-    
+
     require_once ROOTPATH . '/utils/edit_pdf.php';
-    
-  } 
-  
+  }
 }
 
 
@@ -149,30 +147,30 @@ if (!empty($_POST)) {
                           </div>
 
                           <div class="form-group">
-                                                        <label>Actividades</label>
-                                                        <div class="select2-maroon">
-                                                            <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                                <?php
-                                                                require_once ROOTPATH . '/controller/ActivityController.php';
-                                                                $activityController = new ActivityController();
-                                                                if ($_POST['activities']) {
-                                                                    foreach ($activityController->get_activities() as $activity) {
-                                                                ?>
-                                                                        <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                                                    <?php }
-                                                                } else {
-                                                                    foreach ($activityController->get_activities() as $activity) { ?>
-                                                                        <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
-                                                                    <?php
-                                                                    }
-                                                                    ?>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                            <label>Actividades</label>
+                            <div class="select2-maroon">
+                              <select name="activities[]" class="select2 select2-hidden-accessible" multiple="multiple" data-placeholder="Seleccionar actividades" data-dropdown-css-class="select2-maroon" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <?php
+                                require_once ROOTPATH . '/controller/ActivityController.php';
+                                $activityController = new ActivityController();
+                                if ($_POST['activities']) {
+                                  foreach ($activityController->get_activities() as $activity) {
+                                ?>
+                                    <option <?= in_array($activity['id'], $_POST['activities']) ? 'selected="selected"' : '' ?> value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                  <?php }
+                                } else {
+                                  foreach ($activityController->get_activities() as $activity) { ?>
+                                    <option value="<?= $activity['id'] ?>"><?= $activity['name'] ?></option>
+                                  <?php
+                                  }
+                                  ?>
+                                <?php } ?>
+                              </select>
+                            </div>
+                          </div>
 
                       </div>
-                      
+
                       <div class="col-4">
                         <div class="form-group">
                           <div class="form-group">
@@ -244,7 +242,7 @@ if (!empty($_POST)) {
                             <label for="changed" class="custom-control-label">¿Autoriza a que el niño sea cambiado por el docente en caso de ser necesario?</label>
                           </div>
                         </div>
-                        
+
                       </div>
                     </div>
                     <?php
@@ -394,7 +392,7 @@ if (!empty($_POST)) {
 
     </div>
     <!-- /.content-wrapper -->
-    
+
     <?php require_once ROOTPATH . '/common/footer.php' ?>
 
 
@@ -473,7 +471,7 @@ if (!empty($_POST)) {
 
     })
   </script>
-  
+
 </body>
 
 </html>

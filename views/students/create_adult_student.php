@@ -264,7 +264,7 @@ if (!empty($_POST)) {
                         ?>
                           <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <input <?= in_array($medical_history['id'], empty($_POST['medical_history']) ? array() : $_POST['medical_history'] ) ? 'checked="checked"' : '' ?> class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
                               <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
                             </div>
                           </div>
@@ -276,7 +276,7 @@ if (!empty($_POST)) {
                         ?>
                           <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <input <?= in_array($medical_history['id'], empty($_POST['medical_history']) ? array() : $_POST['medical_history'] ) ? 'checked="checked"' : '' ?> class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
                               <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
                             </div>
                           </div>
@@ -288,7 +288,7 @@ if (!empty($_POST)) {
                         ?>
                           <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                              <input class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
+                              <input <?= in_array($medical_history['id'], empty($_POST['medical_history']) ? array() : $_POST['medical_history'] ) ? 'checked="checked"' : '' ?> class="custom-control-input" type="checkbox" id="<?= $medical_history['id'] ?>" name="medical_history[]" value="<?= $medical_history['id'] ?>">
                               <label for="<?= $medical_history['id'] ?>" class="custom-control-label"><?= $medical_history['name'] ?></label>
                             </div>
                           </div>

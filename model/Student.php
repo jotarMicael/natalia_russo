@@ -547,7 +547,7 @@ class Student
         $pdf->setY(12);
         $pdf->setX(10);
         // Agregamos los datos de la empresa
-        $pdf->Cell(5, $textypos, "Estudio de danza: ".SYSTEM_NAME);
+        $pdf->Cell(5, $textypos, "Estudio de danza: " . SYSTEM_NAME);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->setY(30);
         $pdf->setX(10);
@@ -702,16 +702,12 @@ class Student
     {
 
         try {
-            $query = " SELECT s.id as id,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.emergency_name AS emergency_name,s.changed as changed,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,s.dni as dni,
-            GROUP_CONCAT(sd.disease_id) AS diseases 
-            FROM " . $this->table_name . " s 
-            INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
-            LEFT JOIN " . $this->table_name2 . " sd ON (s.id=sd.student_id)
+
+            $query = " SELECT s.type as type
+            FROM " . $this->table_name . " s     
             WHERE s.active=1 and s.id=:student_id 
-            LIMIT 1
+            LIMIT 0,1
                 ";
-
-
 
             $stmt = $this->conn->prepare($query);
 
@@ -719,14 +715,74 @@ class Student
 
             $stmt->execute();
 
-            $student = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)['type']) {
+
+
+                $query = " SELECT s.id as id,s.type as type,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.emergency_name AS emergency_name,s.changed as changed,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,s.dni as dni,s.type as type,
+                            GROUP_CONCAT(sd.disease_id) AS diseases,(SELECT GROUP_CONCAT(sa.activity_id) FROM " . $this->table_name6 . " sa WHERE sa.student_id=:student_id ) as activities
+                            FROM " . $this->table_name . " s 
+                            INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
+                            LEFT JOIN " . $this->table_name2 . " sd ON (s.id=sd.student_id)
+                            WHERE s.active=1 and s.id=:student_id 
+                            LIMIT 1
+                ";
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->bindParam(':student_id', $student_id);
+
+                $stmt->execute();
+
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+
+                $query = " SELECT s.id,
+                s.type as type,
+                s.name as student_name,
+                s.surname as student_surname,
+                s.birth_date as date_birth,
+                s.private_phone_number as private_number,
+                s.other_disease_1 as pathologies,
+                s.social_work_id as medical_coverage,
+                s.dni as dni,
+                s.parents_email as email,
+                s.afiliate_number AS affiliate_number,
+                s.address as address,
+                s.emergency_phone_number AS emergency_number,
+                s.emergency_name AS emergency_name,
+                s.internal as weight,
+                s.medication as medication,
+                s.allergy as allergy,
+                (SELECT GROUP_CONCAT(mh.id)  FROM  " . $this->table_name7 . " smh
+                INNER JOIN " . $this->table_name8 . " mh ON (smh.medical_history_id=mh.id)
+                WHERE mh.id<>27 and smh.student_id = s.id ) AS medical_history,
+                (SELECT smh.count  FROM  " . $this->table_name7 . " smh
+                WHERE smh.medical_history_id=27 and smh.student_id = s.id LIMIT 1) AS physical_aptitude,
+                (SELECT GROUP_CONCAT(sa.activity_id) FROM " . $this->table_name6 . " sa WHERE sa.student_id=:student_id ) as activities
+                FROM " . $this->table_name . " s          
+                WHERE s.id=:student_id and s.active=1
+                GROUP BY s.id
+                LIMIT 0,1
+                ";
+               
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->bindParam(':student_id', $student_id);
+
+                $stmt->execute();
+
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $student['diseases'] = explode(',', $student['diseases']);
+                $student['had_disease'] = explode(',', $student['had_disease']);
+                $student['medical_history'] = explode(',', $student['medical_history']);
+            }
 
             if (empty($student)) {
                 throw new Exception();
             }
+            $student['activities'] = explode(',', $student['activities']);
             return $student;
-
-            
         } catch (Exception) {
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
