@@ -35,7 +35,7 @@ class Service
     function get_services_imports()
     {
 
-        $query = "SELECT s.name as name ,si.import as import ,si.service_date as service_date ,si.created_at as created_at
+        $query = "SELECT IF(s.id=3,si.other,s.name) as name ,si.import as import ,si.service_date as service_date ,si.created_at as created_at
         FROM 
             " . $this->table_name2 . " si
         INNER JOIN  " . $this->table_name . " s ON (si.service_id=s.id)
@@ -57,10 +57,15 @@ class Service
                 throw new Exception();
             }
 
-            $query = "INSERT INTO " . $this->table_name2 . " (service_id,import,service_date)
+            if ($service['service'] == 3) {
+                $query = "INSERT INTO " . $this->table_name2 . " (service_id,import,service_date,other)
+            VALUES ({$service['service']},{$service['import']},'" . substr($service['service_date'], 6, 4) . '-' . substr($service['service_date'], 3, 2) . '-' . substr($service['service_date'], 0, 2) . "','" . trim($service['other']) . "') 
+            ";
+            } else {
+                $query = "INSERT INTO " . $this->table_name2 . " (service_id,import,service_date)
             VALUES ({$service['service']},{$service['import']},'" . substr($service['service_date'], 6, 4) . '-' . substr($service['service_date'], 3, 2) . '-' . substr($service['service_date'], 0, 2) . "') 
             ";
-
+            }
             $stmt = $this->conn->prepare($query);
 
             $stmt->execute();

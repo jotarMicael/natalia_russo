@@ -18,13 +18,16 @@ $studentController = new StudentController();
 
 
 if ($_POST) {
-var_dump($_POST);die;
   $result = $studentController->update_student($_POST);
 
   if ($result[0] == 1) {
 
-
-    require_once ROOTPATH . '/utils/edit_pdf.php';
+    if (!$_POST['type_s']) {
+      require_once ROOTPATH . '/utils/edit_pdf.php';
+    } else {
+      $_POST['date_birth'] = substr($_POST['date_birth'], 6, 4) . '-' . substr($_POST['date_birth'], 3, 2) . '-' . substr($_POST['date_birth'], 0, 2);
+      require_once ROOTPATH . '/utils/edit_adult_pdf.php';
+    }
   }
 }
 if (!$_GET['id']) {
@@ -102,6 +105,7 @@ if (!$_GET['id']) {
               }
               ?><?php if ($result[0] != 3) {
                   if ($result[0] == 4) {
+
                     $error = $result[1];
                   }
                   $result = $studentController->get_only_student($_GET['id']);
@@ -401,7 +405,7 @@ if (!$_GET['id']) {
                     </div>
                     <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
                     <div class="card-footer">
-                    <input type="hidden" name="type_s" id="type_s" value=''>
+                      <input type="hidden" name="type_s" id="type_s" value=''>
                       </form>
                       <button onclick="return update_student('<?= $result['type']; ?>');" type="button" class="btn bg-orange"><i class="fas fa-user-edit"></i> Actualizar datos</button>
                     </div>
@@ -551,10 +555,10 @@ if (!$_GET['id']) {
                           </div>
                         </div>
                         <?php
-                        if ($result[0] == 4) {
+                        if ($error) {
 
-                          echo $result[1];
-                          unset($result);
+                          echo $error;
+                          unset($error);
                         }  ?>
                       </div>
                     </div>
@@ -620,6 +624,7 @@ if (!$_GET['id']) {
                       </div>
                     </div>
                     <div class="card-footer">
+                    <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
                       <input type="hidden" name="type_s" id="type_s" value=''>
                       </form>
                       <button onclick="return update_student('<?= $result['type']; ?>');" type="button" class="btn bg-orange"><i class="fas fa-user-edit"></i> Actualizar datos</button>
