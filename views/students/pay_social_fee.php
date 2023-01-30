@@ -173,7 +173,7 @@ if (!empty($_POST)) {
                           <tr>
                             <td class="text-right"><?= $student['name'] . ' ' . $student['surname'] ?></td>
                             <td class="text-right"><?php echo $share[0]; ?></td>
-                            <td class="text-right"><?php echo '$' . $share[1]; ?></td>
+                            <td class="text-right"><?php echo '$' . number_format($share[1],2,",","."); ?></td>
                             <td class="text-right"><?php echo $share[2]; ?></td>
                             <td class="text-center"><a onclick="send_share_id('<?php echo $share[3] ?>');" type="button" class="btn btn-default bg-danger ">
                                 <i class="fas fa-file-pdf"></i>

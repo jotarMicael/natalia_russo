@@ -35,7 +35,7 @@ class Service
     function get_services_imports()
     {
 
-        $query = "SELECT IF(s.id=3,si.other,s.name) as name ,si.import as import ,si.service_date as service_date ,si.created_at as created_at
+        $query = "SELECT IF(s.id=3,si.other,s.name) as name ,si.import as import ,DATE_FORMAT(si.service_date,'%d/%m/%Y') as service_date ,DATE_FORMAT(si.created_at,'%d/%m/%Y %H:%m:%s') as created_at
         FROM 
             " . $this->table_name2 . " si
         INNER JOIN  " . $this->table_name . " s ON (si.service_id=s.id)

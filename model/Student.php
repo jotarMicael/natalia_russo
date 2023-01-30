@@ -522,7 +522,7 @@ class Student
 
     function generate_fee_pdf(&$share_id)
     {
-        $query = " SELECT CONCAT (s.name, ' ', s.surname) as complete_name,s.address,s.private_phone_number,s.parents_email,DATE_FORMAT(ss.share_date,'%m/%Y') as share_date,DATE_FORMAT(ss.created_at,'%d/%m/%Y %H:%m:%s') as created_at, ss.import  
+        $query = " SELECT CONCAT (s.name, ' ', s.surname) as complete_name,s.dni as dni,s.address,s.private_phone_number,s.parents_email,DATE_FORMAT(ss.share_date,'%m/%Y') as share_date,DATE_FORMAT(ss.created_at,'%d/%m/%Y %H:%m:%s') as created_at, ss.import  
         FROM " . $this->table_name4 . " ss
         INNER JOIN " . $this->table_name . " s ON (ss.student_id=s.id)
         WHERE ss.id=:share_id
@@ -544,39 +544,30 @@ class Student
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 20);
         $textypos = 5;
+        $pdf->Image(BASE_URL.'/dist/img/logo_nati.jpg', 65,-5,70,60);
         $pdf->setY(12);
         $pdf->setX(10);
         // Agregamos los datos de la empresa
-        $pdf->Cell(5, $textypos, "Estudio de danza: " . SYSTEM_NAME);
+        
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->setY(30);
         $pdf->setX(10);
-        $pdf->Cell(5, $textypos, "De:");
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->setY(35);
-        $pdf->setX(10);
-        $pdf->Cell(5, $textypos, "Natalia Russo");
-
-
-        // Agregamos los datos del cliente
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->setY(30);
-        $pdf->setX(65);
         $pdf->Cell(5, $textypos, "Alumno:");
         $pdf->SetFont('Arial', '', 10);
         $pdf->setY(35);
-        $pdf->setX(65);
+        $pdf->setX(10);
         $pdf->Cell(5, $textypos, 'Nombre: ' . $share['complete_name']);
         $pdf->setY(40);
-        $pdf->setX(65);
+        $pdf->setX(10);
         $pdf->Cell(5, $textypos, 'Direccion: ' . $share['address']);
         $pdf->setY(45);
-        $pdf->setX(65);
+        $pdf->setX(10);
         $pdf->Cell(5, $textypos, 'Numero tel.: ' . $share['private_phone_number']);
         $pdf->setY(50);
-        $pdf->setX(65);
+        $pdf->setX(10);
         $pdf->Cell(5, $textypos, 'Email: ' . $share['parents_email']);
 
+      
         // Agregamos los datos del cliente
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->setY(30);
@@ -665,6 +656,7 @@ class Student
         $pdf->Cell(5, $textypos, "Se deja constancia que el cliente ha abonado la cuota mensual.");
         $pdf->setY($yposdinamic + 20);
         $pdf->setX(10);
+        
 
 
         $pdf->output($share['complete_name'] . '-' . $share['share_date'] . '.pdf', 'D');
@@ -718,7 +710,7 @@ class Student
             if (!$stmt->fetch(PDO::FETCH_ASSOC)['type']) {
 
 
-                $query = " SELECT s.id as id,s.type as type,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.emergency_name AS emergency_name,s.changed as changed,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,s.dni as dni,s.type as type,
+                $query = " SELECT s.id as id,s.type as type,s.name AS student_name, sw.id AS medical_coverage, s.afiliate_number AS affiliate_number,s.address AS address, s.surname AS student_surname,s.father_name as father_name,s.private_phone_number AS private_number,s.parents_email AS email,DATE_FORMAT(s.birth_date,'%d/%m/%Y') AS date_birth, s.mother_name AS mother_name,s.emergency_phone_number AS emergency_number,s.emergency_name AS emergency_name,s.changed as changed,s.other_disease_1 as other_diseases_1,s.other_disease_2 as other_diseases_2,s.tetanus_vaccine as antitetano,s.allergy as allergy,s.surgery as surgery,s.diet as diet,s.internal as internated,s.medication as medication,s.authorized as authorized,s.dni as dni,s.type as type,
                             GROUP_CONCAT(sd.disease_id) AS diseases,(SELECT GROUP_CONCAT(sa.activity_id) FROM " . $this->table_name6 . " sa WHERE sa.student_id=:student_id ) as activities
                             FROM " . $this->table_name . " s 
                             INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id = sw.id) 
@@ -740,7 +732,7 @@ class Student
                 s.type as type,
                 s.name as student_name,
                 s.surname as student_surname,
-                DATE_FORMAT(s.birth_date,'%dd/%mm/%Y') AS date_birth,
+                DATE_FORMAT(s.birth_date,'%d/%m/%Y') AS date_birth,
                 s.private_phone_number as private_number,
                 s.other_disease_1 as pathologies,
                 s.social_work_id as medical_coverage,

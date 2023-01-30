@@ -92,8 +92,8 @@ class Teacher
             t.address,
             t.private_phone_number,
             t.email,
-            t.birth_date,
-            t.created_at
+            DATE_FORMAT(t.birth_date,'%d/%m/%Y') as birth_date,
+            DATE_FORMAT(t.created_at,'%d/%m/%Y %H:%m:%s') as created_at
         FROM " . $this->table_name . " t";
 
         $stmt = $this->conn->prepare($query);

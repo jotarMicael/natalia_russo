@@ -20,7 +20,7 @@ $pdf->SetTextColor(0, 0, 0);
 $pdf->SetXY(55, 61);
 $pdf->Write(0, $_POST['student_surname'] . ' ' . $_POST['student_name']);
 $pdf->SetXY(59, 68);
-$pdf->Write(0, $_POST['date_birth']);
+$pdf->Write(0,date("d/m/Y", strtotime($_POST['date_birth'])) );
 $pdf->SetXY(61, 75);
 $pdf->Write(0, $_POST['father_name']);
 $pdf->SetXY(69, 82);
@@ -128,7 +128,7 @@ if (empty($_POST['antitetano'])) {
     $pdf->Write(0, 'O');
     $pdf->SetFont('Arial','',12);
     $pdf->SetXY(114, 205.5);
-    $pdf->Write(0, $_POST['antitetano']);
+    $pdf->Write(0, date("d/m/Y", strtotime($_POST['antitetano'])) );
 }
 
 if (empty($_POST['diet'])) {

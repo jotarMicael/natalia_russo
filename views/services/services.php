@@ -34,8 +34,6 @@ if (!empty($_POST)) {
     <title><?php echo HEAD; ?> | Egresos</title>
     <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
-    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/plugins/fontawesome-free/css/all.min.css">
@@ -187,7 +185,7 @@ if (!empty($_POST)) {
                                                 ?>
                                                     <tr>
                                                         <td class="text-left"><?php echo $service['name']; ?></td>
-                                                        <td class="text-right"><?php echo '$' . $service['import']; ?></td>
+                                                        <td class="text-right"><?php echo '$' . number_format($service['import'],2,",","."); ?></td>
                                                         <td class="text-right"><?php echo $service['service_date']; ?></td>
                                                         <td class="text-right"><?php echo $service['created_at']; ?></td>
 
