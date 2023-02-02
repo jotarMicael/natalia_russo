@@ -20,7 +20,7 @@ class Art
     function get_arts()
     {
 
-        $query = "SELECT a.id,a.name,a.created_at
+        $query = "SELECT a.id,a.name,DATE_FORMAT(a.created_at,'%d/%m/%Y %H:%m:%s') as created_at
         FROM 
             " . $this->table_name . " a
         WHERE a.active=1
@@ -57,7 +57,7 @@ class Art
             }
 
             $query = "INSERT INTO " . $this->table_name . " (name)
-            VALUES ('{$art['name']}') 
+            VALUES ('".trim($art['name'])."') 
             ";
 
 

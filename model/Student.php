@@ -566,7 +566,9 @@ class Student
         $pdf->setY(50);
         $pdf->setX(10);
         $pdf->Cell(5, $textypos, 'Email: ' . $share['parents_email']);
-
+        $pdf->setY(55);
+        $pdf->setX(10);
+        $pdf->Cell(5, $textypos, 'Dni: ' . $share['dni']);
       
         // Agregamos los datos del cliente
         $pdf->SetFont('Arial', 'B', 10);

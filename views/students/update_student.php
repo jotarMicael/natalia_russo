@@ -413,6 +413,7 @@ if (!$_GET['id']) {
                 </div>
               </div>
             </div>
+            <div class="col-2 mb-2"><a type="button" href="<?php echo BASE_URL; ?>views/students/students.php" class="btn btn-block bg-maroon btn-sm"><i class="fas fa-arrow-left"></i>Volver</a></div>
           </div>
         <?php } else { ?>
           <div class="content">
@@ -633,8 +634,9 @@ if (!$_GET['id']) {
                 </div>
               </div>
             </div>
+            <div class="col-2 mb-2"><a type="button" href="<?php echo BASE_URL; ?>views/students/students.php" class="btn btn-block bg-maroon btn-sm"><i class="fas fa-arrow-left"></i>Volver</a></div>
           </div>
-
+        
 
       <?php }
       }

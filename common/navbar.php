@@ -3,10 +3,14 @@
   <ul class="navbar-nav">
     <li class="nav-item">
       <!--<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a> -->
-      <a class="nav-link" data-widget="pushmenu" href="#" role="button"></a>
+     <!-- <a class="nav-link" data-widget="pushmenu" href="#" role="button"></a>-->
     </li>
 
+        <a href="<?php echo BASE_URL; ?>/dist/pdfs/out.pdf" download="Autorizacion.pdf" class="nav-link">Autorización <i class="fas fa-file-download"></i></a>
+      </li>
+
   </ul>
+
 
 
 </nav>

@@ -20,7 +20,7 @@ $nav = 's';
 $serviceController = new ServiceController();
 
 if (!empty($_POST)) {
-    
+
     $result = $serviceController->insert_service_import($_POST);
 }
 ?>
@@ -133,7 +133,7 @@ if (!empty($_POST)) {
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                                         </div>
-                                                        <input required name="service_date" type="text" value="<?php echo $_POST ? $_POST['service_date'] : ''; ?>" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                                        <input required id="service_date" name="service_date" type="text" value="<?php echo $_POST ? $_POST['service_date'] : ''; ?>" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                                                     </div>
                                                     <!-- /.input group -->
                                                 </div>
@@ -147,7 +147,7 @@ if (!empty($_POST)) {
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                                         </div>
-                                                        <input type="number" step="0.01" min="0" required name="import" value="<?php echo $_POST ? $_POST['import'] : ''; ?>" class="form-control">
+                                                        <input type="number" step="0.01" min="0" required id="import" name="import" value="<?php echo $_POST ? $_POST['import'] : ''; ?>" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,7 +185,7 @@ if (!empty($_POST)) {
                                                 ?>
                                                     <tr>
                                                         <td class="text-left"><?php echo $service['name']; ?></td>
-                                                        <td class="text-right"><?php echo '$' . number_format($service['import'],2,",","."); ?></td>
+                                                        <td class="text-right"><?php echo '$' . number_format($service['import'], 2, ",", "."); ?></td>
                                                         <td class="text-right"><?php echo $service['service_date']; ?></td>
                                                         <td class="text-right"><?php echo $service['created_at']; ?></td>
 
@@ -244,7 +244,19 @@ if (!empty($_POST)) {
     <script>
         function create_service() {
 
-            return confirm('#create_service', false);
+
+            if (($("#service").val() != 3 && ($('#service_date').val() == '' || $('#import').val() == '') || ($("#service").val() == 3 && $('#other').val() == ''))) {
+                Swal.fire({
+                    icon: 'warning',
+                    confirmButtonColor: '#00A300',
+                    confirmButtonText: 'OK',
+                    html: '<b>Todos los campos deben estar completos</b>',
+
+                })
+
+            } else {
+                return confirm('#create_service', false);
+            }
         }
 
         $(function() {
