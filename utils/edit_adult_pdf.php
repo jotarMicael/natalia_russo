@@ -26,7 +26,7 @@ $pdf->Write(0, $_POST['private_number']);
 $pdf->SetXY(40, 75.5);
 $pdf->Write(0, get_age($_POST['date_birth']));
 $pdf->SetXY(110, 75.5);
-$pdf->Write(0, $_POST['weight'].'KG');
+$pdf->Write(0, (empty($_POST['weight']) ? 0 : $_POST['weight']) .'KG');
 $pdf->SetXY(42, 83);
 $pdf->Write(0, $_POST['pathologies']);
 $pdf->SetXY(38, 106.3);
