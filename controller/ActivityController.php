@@ -44,4 +44,29 @@ class ActivityController
 
         return $activity->get_students_by_activities($activities);
     }
+
+    function get_students_by_activity(&$activity_)
+    {
+
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $activity = new Activity($db);
+
+
+        return $activity->get_students_by_activity($activity_);
+    }
+
+    function get_activity_name(&$activity_)
+    {
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $activity = new Activity($db);
+
+
+        return $activity->get_activity_name($activity_);
+    }
 }

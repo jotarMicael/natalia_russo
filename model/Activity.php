@@ -46,10 +46,10 @@ class Activity
             LIMIT 0,1
             ";
 
-            
+
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(':name', strtoupper(trim($activity['name'])),T_STRING);
+            $stmt->bindParam(':name', strtoupper(trim($activity['name'])), T_STRING);
 
             $stmt->execute();
 
@@ -87,7 +87,7 @@ class Activity
             " . $this->table_name2 . " sa ON (s.id=sa.student_id)
             INNER JOIN 
             " . $this->table_name . " ac ON (sa.activity_id=ac.id)            
-            WHERE s.active=1 and ac.id IN (".implode(',', $activities).")
+            WHERE s.active=1 and ac.id IN (" . implode(',', $activities) . ")
             GROUP BY s.id
                 
             ";
@@ -95,7 +95,7 @@ class Activity
             $stmt = $this->conn->prepare($query);
 
 
-            
+
 
             $stmt->execute();
 
@@ -104,4 +104,57 @@ class Activity
             return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
     }
+
+    function get_students_by_activity(&$activity)
+    {
+
+        try {
+
+            $query = "SELECT s.name as name,s.surname as surname,s.dni as dni,DATE_FORMAT(s.birth_date,'%d/%m/%Y') AS date_birth, DATE_FORMAT(s.created_at,'%d/%m/%Y %H:%m:%s') AS created_at
+            FROM 
+                " . $this->table_name3 . " s        
+            INNER JOIN 
+            " . $this->table_name2 . " sa ON (s.id=sa.student_id)
+            INNER JOIN 
+            " . $this->table_name . " ac ON (sa.activity_id=ac.id)            
+            WHERE s.active=1 and ac.id=$activity
+            GROUP BY s.id
+                
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+    function get_activity_name(&$activity)
+    {
+
+        try {
+
+            $query = "SELECT a.name as name
+            FROM 
+                " . $this->table_name . " a      
+          
+            WHERE a.id=$activity
+            LIMIT 0,1
+          
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC)['name'];
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
+
 }

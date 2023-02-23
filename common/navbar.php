@@ -3,11 +3,11 @@
   <ul class="navbar-nav">
     <li class="nav-item">
       <!--<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a> -->
-     <!-- <a class="nav-link" data-widget="pushmenu" href="#" role="button"></a>-->
+      <!-- <a class="nav-link" data-widget="pushmenu" href="#" role="button"></a>-->
     </li>
 
-        <a href="<?php echo BASE_URL; ?>/dist/pdfs/out.pdf" download="Autorizacion.pdf" class="nav-link">Autorización <i class="fas fa-file-download"></i></a>
-      </li>
+    <a href="<?php echo BASE_URL; ?>/dist/pdfs/out.pdf" download="Autorizacion.pdf" class="nav-link">Autorización <i class="fas fa-file-download"></i></a>
+    </li>
 
   </ul>
 
@@ -51,7 +51,7 @@
             <p> Alumnos <i class=" fas fa-angle-left right"></i></p>
           </a>
 
-          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce', 'aa','cae')) ? 'block' : 'none'; ?>;">
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ce', 'aa', 'cae')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/students/create_student.php" class="nav-link <?php echo $nav == 'ce' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
@@ -82,7 +82,7 @@
           <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('ct')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/teachers/create_teacher.php" class="nav-link <?php echo $nav == 'ct' ? 'bg-orange' : ''; ?>">
-              <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                <i class="nav-icon fas fa-chalkboard-teacher"></i>
                 <p>Alta de profesor</p>
               </a>
             </li>
@@ -94,18 +94,26 @@
             <p> Actividades <i class=" fas fa-angle-left right"></i></p>
           </a>
 
-          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('a')) ? 'block' : 'none'; ?>;">
+          <ul class="nav nav-treeview" style="display: <?php echo in_array($nav, array('a', 'axa')) ? 'block' : 'none'; ?>;">
             <li class="nav-item">
               <a href="<?php echo BASE_URL; ?>views/activities/activities.php" class="nav-link <?php echo $nav == 'a' ? 'bg-orange' : ''; ?>">
                 <i class="nav-icon fas fa-chart-line"></i>
                 <p>Alta de actividad</p>
               </a>
             </li>
+
+
+            <li class="nav-item">
+              <a href="<?php echo BASE_URL; ?>views/activities/activity_report.php" class="nav-link <?php echo $nav == 'axa' ? 'bg-orange' : ''; ?>">
+                <i class="nav-icon fas fa-chart-line"></i>
+                <p>Alumnos por actividad</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item">
           <a href="<?php echo BASE_URL; ?>views/services/services.php" class="nav-link <?php echo $nav == 's' ? 'bg-orange' : ''; ?>" class="nav-link">
-          <i class="nav-icon fas fa-cash-register"></i>
+            <i class="nav-icon fas fa-cash-register"></i>
             <p>
               Egresos
             </p>
@@ -113,7 +121,7 @@
         </li>
         <li class="nav-item">
           <a href="<?php echo BASE_URL; ?>views/art/art.php" class="nav-link <?php echo $nav == 'art' ? 'bg-orange' : ''; ?>" class="nav-link">
-          <i class="nav-icon fas fa-user-shield"></i>
+            <i class="nav-icon fas fa-user-shield"></i>
             <p>
               ART
             </p>
