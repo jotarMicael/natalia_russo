@@ -523,6 +523,53 @@ class Student
         }
     }
 
+    function update_social_fee(&$social_fee_id, $share_date, &$import,&$student_id)
+    {
+        try {
+            if (strpos($share_date, 'm') || strpos($share_date, 'y')) {
+                return throw new Exception();
+            }
+
+        
+            $share_date = substr($share_date, 3, 4) . '-' . substr($share_date, 0, 2) . '-' . '01';
+
+            $query = " SELECT ss.id
+            FROM " . $this->table_name4 . " ss
+            WHERE ss.id!=:social_fee_id and ss.student_id=:student_id and ss.share_date BETWEEN :share_date AND LAST_DAY(:share_date)
+            LIMIT 0,1
+            ";
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':social_fee_id', $social_fee_id);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':share_date', $share_date);
+
+
+            $stmt->execute();
+
+
+            if ($stmt->rowCount() == 1) {
+                return array(2, 'La cuota del <strong>' .  substr($share_date, 5, 2) . '/' .  substr($share_date, 0, 4)   . '</strong> ya se encuentra abonada en el sistema');
+            }
+
+
+            $query = "UPDATE  " . $this->table_name4 . " 
+            SET share_date='$share_date',import=$import
+            WHERE id=$social_fee_id
+            LIMIT 1
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->execute();
+
+            return array(1, 'La cuota del <strong>' .  substr($share_date, 5, 2) . '/' .  substr($share_date, 0, 4)   . '</strong> ha sido actualizada en el sistema');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
     function generate_fee_pdf(&$share_id)
     {
         $query = " SELECT CONCAT (s.name, ' ', s.surname) as complete_name,s.dni as dni,s.address,s.private_phone_number,s.parents_email,DATE_FORMAT(ss.share_date,'%m/%Y') as share_date,DATE_FORMAT(ss.created_at,'%d/%m/%Y %H:%m:%s') as created_at, ss.import  
@@ -784,6 +831,35 @@ class Student
         }
     }
 
+    function get_student_social_fee(&$social_fee)
+    {
+
+        try {
+            $query = " SELECT ss.id, s.id as student_id,s.name, s.surname, DATE_FORMAT(ss.share_date,'%m/%Y') as share_date, ss.import
+            FROM
+            " . $this->table_name4 . " ss 
+            INNER JOIN " . $this->table_name . " s ON (ss.student_id=s.id)
+            WHERE ss.id=:social_fee
+            LIMIT 1
+                ";
+
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':social_fee', $social_fee);
+
+            $stmt->execute();
+
+            if (empty($social_fee = $stmt->fetch(PDO::FETCH_ASSOC))) {
+                throw new Exception();
+            }
+
+            return $social_fee;
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
+        }
+    }
+
     function get_students_birthdate()
     {
         try {
@@ -806,105 +882,105 @@ class Student
     function update_student(&$student)
     {
 
-         try {
+        try {
 
 
-        $insert = '';
+            $insert = '';
 
-        $query = " SELECT s.id FROM " . $this->table_name . " s 
+            $query = " SELECT s.id FROM " . $this->table_name . " s 
                 WHERE
                     s.dni=:dni AND s.id!=:id
                     LIMIT 0,1
                 ";
 
-        $stmt = $this->conn->prepare($query);
+            $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":dni", $student['dni']);
-        $stmt->bindParam(":id", $student['id']);
+            $stmt->bindParam(":dni", $student['dni']);
+            $stmt->bindParam(":id", $student['id']);
 
-        if (!$student['type_s']) {
+            if (!$student['type_s']) {
 
-            $student['student_name'] = trim($student['student_name']);
-            $student['student_surname'] = trim($student['student_surname']);
-            $student['mother_name'] = trim($student['mother_name']);
-            $student['father_name'] = trim($student['father_name']);
-            $student['emergency_name'] = trim($student['emergency_name']);
-            $student['address'] = trim($student['address']);
-            $student['email'] = trim($student['email']);
-            $student['affiliate_number'] = trim($student['affiliate_number']);
-
-
-            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['emergency_number']) || empty($student['emergency_name']) || empty($student['dni'])) {
-                return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
-            }
+                $student['student_name'] = trim($student['student_name']);
+                $student['student_surname'] = trim($student['student_surname']);
+                $student['mother_name'] = trim($student['mother_name']);
+                $student['father_name'] = trim($student['father_name']);
+                $student['emergency_name'] = trim($student['emergency_name']);
+                $student['address'] = trim($student['address']);
+                $student['email'] = trim($student['email']);
+                $student['affiliate_number'] = trim($student['affiliate_number']);
 
 
-            $stmt->execute();
-
-            if (!empty($stmt->fetch(PDO::FETCH_ASSOC))) {
-                return array(2, 'El alumno <strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ya se encuentra registrado en el sistema');
-            }
-
-
-
-            if (!empty($student['other_diseases_1'])) {
-                $insert .= ',s.other_disease_1=' . "'" . $student['other_diseases_1'] . "'";
-            }
-
-            if (!empty($student['other_diseases_2'])) {
-                $insert .= ',s.other_disease_2=' . "'" . $student['other_diseases_2'] . "'";
-            }
-
-            if (!empty($student['internated'])) {
-                $insert .= ',s.internal=' . "'" . $student['internated'] . "'";
-            }
-
-            if (!empty($student['surgery'])) {
-                $insert .= ',s.surgery=' . "'" . $student['surgery'] . "'";
-            }
-
-            if (!empty($student['medication'])) {
-                $insert .= ',s.medication=' . "'" . $student['medication'] . "'";
-            }
-
-            if (!empty($student['antitetano'])) {
-                $antitetano_date = "'" . substr($student['antitetano'], 6, 4) . '-' . substr($student['antitetano'], 3, 2) . '-' . substr($student['antitetano'], 0, 2) . "'";
-                $insert .= ',s.tetanus_vaccine=' . $antitetano_date;
-            }
-
-            if (!empty($student['diet'])) {
-                $insert .= ',s.diet=' . "'" . $student['diet'] . "'";
-            }
-
-            if (!empty($student['allergy'])) {
-                $insert .= ',s.allergy=' . "'" . $student['allergy'] . "'";
-            }
-
-
-            if (!empty($student['had_disease'])) {
-                $had_diseases = [];
-                foreach ($student['had_disease'] as $disease) {
-                    $had_diseases[] = "({$student['id']},$disease)";
+                if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['emergency_number']) || empty($student['emergency_name']) || empty($student['dni'])) {
+                    return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
                 }
 
-                $query = "INSERT INTO " . $this->table_name2 . " 
+
+                $stmt->execute();
+
+                if (!empty($stmt->fetch(PDO::FETCH_ASSOC))) {
+                    return array(2, 'El alumno <strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ya se encuentra registrado en el sistema');
+                }
+
+
+
+                if (!empty($student['other_diseases_1'])) {
+                    $insert .= ',s.other_disease_1=' . "'" . $student['other_diseases_1'] . "'";
+                }
+
+                if (!empty($student['other_diseases_2'])) {
+                    $insert .= ',s.other_disease_2=' . "'" . $student['other_diseases_2'] . "'";
+                }
+
+                if (!empty($student['internated'])) {
+                    $insert .= ',s.internal=' . "'" . $student['internated'] . "'";
+                }
+
+                if (!empty($student['surgery'])) {
+                    $insert .= ',s.surgery=' . "'" . $student['surgery'] . "'";
+                }
+
+                if (!empty($student['medication'])) {
+                    $insert .= ',s.medication=' . "'" . $student['medication'] . "'";
+                }
+
+                if (!empty($student['antitetano'])) {
+                    $antitetano_date = "'" . substr($student['antitetano'], 6, 4) . '-' . substr($student['antitetano'], 3, 2) . '-' . substr($student['antitetano'], 0, 2) . "'";
+                    $insert .= ',s.tetanus_vaccine=' . $antitetano_date;
+                }
+
+                if (!empty($student['diet'])) {
+                    $insert .= ',s.diet=' . "'" . $student['diet'] . "'";
+                }
+
+                if (!empty($student['allergy'])) {
+                    $insert .= ',s.allergy=' . "'" . $student['allergy'] . "'";
+                }
+
+
+                if (!empty($student['had_disease'])) {
+                    $had_diseases = [];
+                    foreach ($student['had_disease'] as $disease) {
+                        $had_diseases[] = "({$student['id']},$disease)";
+                    }
+
+                    $query = "INSERT INTO " . $this->table_name2 . " 
                         (student_id,disease_id)
                         VALUES
                         " . implode(",", $had_diseases) . ";
                 ";
 
-                $stmt = $this->conn->prepare($query);
+                    $stmt = $this->conn->prepare($query);
 
-                $stmt->execute();
-            }
-
-            if (!empty($student['diseases'])) {
-                $diseases = [];
-                foreach ($student['diseases'] as $disease) {
-                    $diseases[] = "({$student['id']},$disease)";
+                    $stmt->execute();
                 }
 
-                $query = "INSERT INTO " . $this->table_name2 . " 
+                if (!empty($student['diseases'])) {
+                    $diseases = [];
+                    foreach ($student['diseases'] as $disease) {
+                        $diseases[] = "({$student['id']},$disease)";
+                    }
+
+                    $query = "INSERT INTO " . $this->table_name2 . " 
                         (student_id,disease_id)
                         VALUES
                         " . implode(",", $diseases) . ";
@@ -912,12 +988,12 @@ class Student
 
 
 
-                $stmt = $this->conn->prepare($query);
+                    $stmt = $this->conn->prepare($query);
 
-                $stmt->execute();
-            }
+                    $stmt->execute();
+                }
 
-            $query = "UPDATE " . $this->table_name . " s
+                $query = "UPDATE " . $this->table_name . " s
                 SET 
                     s.name='{$student['student_name']}',s.surname='{$student['student_surname']}',s.birth_date='" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "',
                     s.father_name='{$student['father_name']}',s.dni={$student['dni']},s.mother_name='{$student['mother_name']}',s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.emergency_name='{$student['emergency_name']}',s.address='{$student['address']}',s.authorized=" . (empty($student['authorized']) ? 0 : 1) . ",s.parents_email='{$student['email']}',s.social_work_id=" . ($student['medical_coverage'] == 0 ? "NULL" : $student['medical_coverage']) . ",
@@ -927,45 +1003,45 @@ class Student
                 LIMIT 1";
 
 
-            $stmt = $this->conn->prepare($query);
+                $stmt = $this->conn->prepare($query);
 
-            $stmt->execute();
+                $stmt->execute();
 
-            return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ha sido actualizado');
-        } else {
+                return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ha sido actualizado');
+            } else {
 
-            $student['student_name'] = trim($student['student_name']);
-            $student['student_surname'] = trim($student['student_surname']);
-            $student['emergency_name'] = trim($student['emergency_name']);
-            $student['address'] = trim($student['address']);
-            $student['email'] = trim($student['email']);
-            $student['affiliate_number'] = trim($student['affiliate_number']);
-
-
-            if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['emergency_number']) || empty($student['emergency_name']) || empty($student['dni'])) {
-                return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
-            }
-
-            $stmt->execute();
-
-            if (!empty($stmt->fetch(PDO::FETCH_ASSOC))) {
-                return array(2, 'El alumno <strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ya se encuentra registrado en el sistema');
-            }
-
-            if (!empty($student['medication'])) {
-                $insert .= ',medication=' . "'" . $student['medication'] . "'";
-            }
-
-            if (!empty($student['pathologies'])) {
-                $insert .= ',other_disease_1=' . "'" . $student['pathologies'] . "'";
-            }
+                $student['student_name'] = trim($student['student_name']);
+                $student['student_surname'] = trim($student['student_surname']);
+                $student['emergency_name'] = trim($student['emergency_name']);
+                $student['address'] = trim($student['address']);
+                $student['email'] = trim($student['email']);
+                $student['affiliate_number'] = trim($student['affiliate_number']);
 
 
-            if (!empty($student['allergy'])) {
-                $insert .= ',allergy=' . "'" . $student['allergy'] . "'";
-            }
+                if (empty($student['student_name']) || empty($student['student_surname']) || empty($student['date_birth']) || empty($student['emergency_number']) || empty($student['emergency_name']) || empty($student['dni'])) {
+                    return array(4, '<div class="text-danger">Todos los campos de esta sección deben completarse*</div>');
+                }
 
-            $query = "UPDATE " . $this->table_name . " s SET
+                $stmt->execute();
+
+                if (!empty($stmt->fetch(PDO::FETCH_ASSOC))) {
+                    return array(2, 'El alumno <strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ya se encuentra registrado en el sistema');
+                }
+
+                if (!empty($student['medication'])) {
+                    $insert .= ',medication=' . "'" . $student['medication'] . "'";
+                }
+
+                if (!empty($student['pathologies'])) {
+                    $insert .= ',other_disease_1=' . "'" . $student['pathologies'] . "'";
+                }
+
+
+                if (!empty($student['allergy'])) {
+                    $insert .= ',allergy=' . "'" . $student['allergy'] . "'";
+                }
+
+                $query = "UPDATE " . $this->table_name . " s SET
                 s.name='{$student['student_name']}',s.surname='{$student['student_surname']}',s.birth_date='" . substr($student['date_birth'], 6, 4) . '-' . substr($student['date_birth'], 3, 2) . '-' . substr($student['date_birth'], 0, 2) . "',
                 s.dni={$student['dni']},s.private_phone_number='{$student['private_number']}',s.emergency_phone_number='{$student['emergency_number']}',s.emergency_name='{$student['emergency_name']}',s.address='{$student['address']}',s.parents_email='{$student['email']}',s.social_work_id=" . ($student['medical_coverage'] == 0 ? "NULL" : $student['medical_coverage']) . ",
                 s.afiliate_number='{$student['affiliate_number']}',s.internal=" . (empty($student['weight']) ? 0 : $student['weight']) . "" . $insert . "
@@ -975,77 +1051,77 @@ class Student
                 ";
 
 
-            $stmt = $this->conn->prepare($query);
+                $stmt = $this->conn->prepare($query);
 
-            $stmt->execute();
+                $stmt->execute();
 
-            $id = $this->conn->lastInsertId();
+                $id = $this->conn->lastInsertId();
 
-            $query = "DELETE FROM  " . $this->table_name7 . " smh
+                $query = "DELETE FROM  " . $this->table_name7 . " smh
                 WHERE smh.student_id={$student['id']}
                 ;";
 
 
-            $stmt = $this->conn->prepare($query);
+                $stmt = $this->conn->prepare($query);
 
-            $stmt->execute();
-            if (!empty($student['medical_history'])) {
-                $had_medical_history = [];
-                foreach ($student['medical_history'] as $medical_history) {
-                    $had_medical_history[] = "({$student['id']},$medical_history)";
-                }
+                $stmt->execute();
+                if (!empty($student['medical_history'])) {
+                    $had_medical_history = [];
+                    foreach ($student['medical_history'] as $medical_history) {
+                        $had_medical_history[] = "({$student['id']},$medical_history)";
+                    }
 
-                $query = "INSERT INTO " . $this->table_name7 . " 
+                    $query = "INSERT INTO " . $this->table_name7 . " 
                         (student_id,medical_history_id)
                         VALUES
                         " . implode(",", $had_medical_history) . ";
                 ";
 
-                $stmt = $this->conn->prepare($query);
+                    $stmt = $this->conn->prepare($query);
 
-                $stmt->execute();
-            }
+                    $stmt->execute();
+                }
 
-            $query = "INSERT INTO " . $this->table_name7 . " 
+                $query = "INSERT INTO " . $this->table_name7 . " 
                         (student_id,medical_history_id,count)
                         VALUES
                         ({$student['id']},27,{$student['physical_aptitude']});
                 ";
 
-            $stmt = $this->conn->prepare($query);
+                $stmt = $this->conn->prepare($query);
 
-            $stmt->execute();
+                $stmt->execute();
 
 
-            $query = "DELETE FROM  " . $this->table_name6 . " sa
+                $query = "DELETE FROM  " . $this->table_name6 . " sa
                 WHERE sa.student_id={$student['id']}
                 ;";
 
 
-            $stmt = $this->conn->prepare($query);
+                $stmt = $this->conn->prepare($query);
 
-            $stmt->execute();
+                $stmt->execute();
 
-            $activities = [];
-            if (!empty($student['activities'])) {
-                foreach ($student['activities'] as $activity) {
-                    $activities[] = "({$student['id']},$activity)";
-                }
+                $activities = [];
+                if (!empty($student['activities'])) {
+                    foreach ($student['activities'] as $activity) {
+                        $activities[] = "({$student['id']},$activity)";
+                    }
 
-                $query = "INSERT INTO " . $this->table_name6 . " 
+                    $query = "INSERT INTO " . $this->table_name6 . " 
                         (student_id,activity_id)
                         VALUES
                         " . implode(",", $activities) . ";
                 ";
 
-                $stmt = $this->conn->prepare($query);
+                    $stmt = $this->conn->prepare($query);
 
-                $stmt->execute();
+                    $stmt->execute();
+                }
+                return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
             }
-            return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> dado de alta');
+        } catch (Exception) {
+            return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
         }
-         } catch (Exception) {
-        return array(3, 'Ha ocurrido un error inesperado, por favor reinténtelo nuevamente');
-         }
     }
 }

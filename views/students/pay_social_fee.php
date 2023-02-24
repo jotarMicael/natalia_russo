@@ -161,7 +161,7 @@ if (!empty($_POST)) {
                           <th>Fecha cuota</th>
                           <th>Importe abonado</th>
                           <th>Fecha pago</th>
-                          <th>Descargar recibo</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -175,6 +175,8 @@ if (!empty($_POST)) {
                             <td class="text-right"><?php echo $share[2]; ?></td>
                             <td class="text-center"><a onclick="send_share_id('<?php echo $share[3] ?>');" type="button" class="btn btn-default bg-danger ">
                                 <i class="fas fa-file-pdf"></i>
+                              </a><a onclick="return confirm('<?php echo BASE_URL ?>views/students/update_social_fee.php?id=<?php echo $share[3] ?>',true);" type="button" class="btn btn-default bg-warning ">
+                              <i class="fas fa-pencil-alt"></i>
                               </a></td>
 
                           </tr>
@@ -199,6 +201,9 @@ if (!empty($_POST)) {
         <div class="col-2 mb-2"><a type="button" href="<?php echo BASE_URL; ?>views/students/students.php" class="btn btn-block bg-maroon btn-sm"><i class="fas fa-arrow-left"></i>Volver</a></div>
       </section>
       <form id="pdf" method="post">
+        <input id="share_id" name="share_id" type="hidden" id=''>
+      </form>
+      <form id="share_edit" method="post">
         <input id="share_id" name="share_id" type="hidden" id=''>
       </form>
 
