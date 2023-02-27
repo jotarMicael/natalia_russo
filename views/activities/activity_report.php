@@ -30,7 +30,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo HEAD; ?> | Alumnos por actividad<?= !empty($_POST['activity']) ? ': '. $activityController->get_activity_name($_POST['activity']) : '';   ?></title>
+    <title><?php echo HEAD; ?> | Alumnos por actividad<?= !empty($_POST['activity']) ? ': ' . $activityController->get_activity_name($_POST['activity']) : '';   ?></title>
     <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/dist/img/logo_nati.jpg">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -124,48 +124,52 @@ if (!empty($_POST)) {
 
                         </div>
                         <?php
-                        if (!empty($result)) { ?>
+                        if ($_POST) { ?>
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header"> <strong><i class="fas fa-chart-line"></i> Alumnos por actividad</strong></div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-
-                                        <table id="example1" class="table table-bordered table-striped table-hover table-sm">
-                                            <thead>
-                                                <tr>
-
-                                                    <th>Nombre</th>
-                                                    <th>Apellido</th>
-                                                    <th>Dni</th>
-                                                    <th>Cumpleaños</th>
-                                                    <th>Fecha de Alta</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                foreach ($result as $student) {
-                                                ?>
+                                        <?php if (!empty($result)) { ?>
+                                            <table id="example1" class="table table-bordered table-striped table-hover table-sm">
+                                                <thead>
                                                     <tr>
 
-                                                        <td class="text-left"><?php echo $student['name']; ?></td>
-                                                        <td class="text-right"><?php echo $student['surname']; ?></td>
-                                                        <td class="text-right"><?php echo $student['dni']; ?></td>
-                                                        <td class="text-right"><?php echo $student['date_birth']; ?></td>
-                                                        <td class="text-right"><?php echo $student['created_at']; ?></td>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido</th>
+                                                        <th>Dni</th>
+                                                        <th>Fecha de Nacimiento</th>
+                                                        <th>Fecha de Alta</th>
                                                     </tr>
-                                                <?php } ?>
-                                            </tbody>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    foreach ($result as $student) {
+                                                    ?>
+                                                        <tr>
 
-                                        </table>
+                                                            <td class="text-left"><?php echo $student['name']; ?></td>
+                                                            <td class="text-right"><?php echo $student['surname']; ?></td>
+                                                            <td class="text-right"><?php echo $student['dni']; ?></td>
+                                                            <td class="text-right"><?php echo $student['date_birth']; ?></td>
+                                                            <td class="text-right"><?php echo $student['created_at']; ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
 
+                                            </table>
+                                        <?php } else { ?>
+                                            <span class="text-danger" >Sin resultados.</span>
+                                        <?php } ?>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
 
 
                             </div>
-                        <?php } ?>
+                        <?php
+                        } ?>
+
                     </div>
                 </div>
             </section>

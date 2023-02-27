@@ -113,7 +113,7 @@
         </li>
         <li class="nav-item">
           <a href="<?php echo BASE_URL; ?>views/services/services.php" class="nav-link <?php echo $nav == 's' ? 'bg-orange' : ''; ?>" class="nav-link">
-            <i class="nav-icon fas fa-cash-register"></i>
+          <i class="nav-icon fas fa-cash-register"></i>
             <p>
               Egresos
             </p>

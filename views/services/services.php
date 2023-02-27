@@ -177,6 +177,7 @@ if (!empty($_POST)) {
                                                     <th>Importe</th>
                                                     <th>Fecha egreso</th>
                                                     <th>Fecha carga</th>
+                                                    <th>Editar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -188,6 +189,9 @@ if (!empty($_POST)) {
                                                         <td class="text-right"><?php echo '$' . number_format($service['import'], 2, ",", "."); ?></td>
                                                         <td class="text-right"><?php echo $service['service_date']; ?></td>
                                                         <td class="text-right"><?php echo $service['created_at']; ?></td>
+                                                        <td class="text-center"><a onclick="return confirm('<?php echo BASE_URL ?>views/services/update_service.php?id=<?php echo $service['id'] ?>',true);" type="button" class="btn btn-default bg-warning ">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                            </a></td>
 
                                                     </tr>
                                                 <?php } ?>
