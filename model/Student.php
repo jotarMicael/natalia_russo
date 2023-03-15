@@ -523,14 +523,14 @@ class Student
         }
     }
 
-    function update_social_fee(&$social_fee_id, $share_date, &$import,&$student_id)
+    function update_social_fee(&$social_fee_id, $share_date, &$import, &$student_id)
     {
         try {
             if (strpos($share_date, 'm') || strpos($share_date, 'y')) {
                 return throw new Exception();
             }
 
-        
+
             $share_date = substr($share_date, 3, 4) . '-' . substr($share_date, 0, 2) . '-' . '01';
 
             $query = " SELECT ss.id
@@ -1006,6 +1006,34 @@ class Student
                 $stmt = $this->conn->prepare($query);
 
                 $stmt->execute();
+
+                $query = "DELETE FROM  " . $this->table_name6 . " sa
+                WHERE sa.student_id={$student['id']}
+                ;";
+
+
+                $stmt = $this->conn->prepare($query);
+
+                $stmt->execute();
+
+                $activities = [];
+                if (!empty($student['activities'])) {
+                    foreach ($student['activities'] as $activity) {
+                        $activities[] = "({$student['id']},$activity)";
+                    }
+
+                    $query = "INSERT INTO " . $this->table_name6 . " 
+                        (student_id,activity_id)
+                        VALUES
+                        " . implode(",", $activities) . ";
+                ";
+
+                    $stmt = $this->conn->prepare($query);
+
+                    $stmt->execute();
+                }
+
+
 
                 return array(1, '<strong>' .  $student['student_name'] . ' ' . $student['student_surname'] . '</strong> ha sido actualizado');
             } else {
