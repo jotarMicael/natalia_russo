@@ -1058,7 +1058,8 @@ class Student
                 $id = $this->conn->lastInsertId();
 
                 $query = "DELETE FROM  " . $this->table_name7 . " smh
-                WHERE smh.student_id={$student['id']}
+                WHERE 
+                    smh.student_id={$student['id']}
                 ;";
 
 
