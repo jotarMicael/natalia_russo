@@ -106,7 +106,7 @@ if (!empty($_POST)) {
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>DNI</th>
-                        <th>Dirección</th>
+                        <th>Actividades</th>
                         <th>Número privado</th>
                         <th>Acciones</th>
                       </tr>
@@ -126,7 +126,7 @@ if (!empty($_POST)) {
                           </td>
                           <td><?php echo $student['surname'] ?></td>
                           <td><?php echo $student['dni'] ?></td>
-                          <td><?php echo $student['address'] ?></td>
+                          <td><?php echo $student['activities'] ?></td>
                           <td><?php echo $student['private_phone_number'] ?></td>
                           <td class="project-actions text-center">
                             <a onclick="open_technical_sheet('<?= $student['id'] ?>','<?= $student['type'] ?>');" type="button" class="btn btn-sm bg-danger ">
@@ -202,9 +202,16 @@ if (!empty($_POST)) {
   <!-- AdminLTE App -->
   <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+
+  
+
+  <script src="<?php echo BASE_URL; ?>/dist/js/options_export_file.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
   <script>
+
+     datatable([0,1,2,3,4]);              
+    
     function send_delete_id(id) {
       $('#delete_id').val(id);
       return confirm('#delete_student', false);

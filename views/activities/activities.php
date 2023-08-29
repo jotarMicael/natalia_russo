@@ -192,10 +192,12 @@ if (!empty($_POST)) {
     <!-- AdminLTE App -->
     <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+    <script src="<?php echo BASE_URL; ?>/dist/js/options_export_file.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
 
     <script>
+        datatable(':visible');    
         function create_activity() {
             
             if ($("#name").val() == '') {

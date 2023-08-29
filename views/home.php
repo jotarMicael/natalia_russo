@@ -136,9 +136,13 @@ $nav = 'h';
 
     <script src="<?php echo BASE_URL; ?>/plugins/inputmask/jquery.inputmask.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>/dist/js/options_export_file.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+    <script>
 
+    datatable(':visible');    
+    </script>
 </body>
 
 </html>

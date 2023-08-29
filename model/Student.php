@@ -14,6 +14,7 @@ class Student
     private $table_name6 = "students_activities";
     private $table_name7 = "students_medical_history";
     private $table_name8 = "medical_history";
+    private $table_name9 = "activities";
 
     public function __construct($db = null)
     {
@@ -326,8 +327,11 @@ class Student
     function get_all_student_actives()
     {
         try {
-            $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,s.address,s.private_phone_number FROM " . $this->table_name . " s 
-            WHERE s.active=1
+            $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,GROUP_CONCAT(a.name) as activities,s.private_phone_number FROM ". $this->table_name ." s 
+            LEFT JOIN ". $this->table_name6 ." sa ON (s.id=sa.student_id)
+            LEFT JOIN ". $this->table_name9 ." a ON (sa.activity_id=a.id)
+            WHERE s.active=1 
+            GROUP BY s.id
         ";
 
             $stmt = $this->conn->prepare($query);

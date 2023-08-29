@@ -195,8 +195,10 @@ if (!empty($_POST)) {
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>/dist/js/options_export_file.js"></script>
     <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
     <script>
+          datatable([0,1,2,3]); 
         function send_share_id(id) {
             $('#share_id').val(id);
             $('#pdf').submit();

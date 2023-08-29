@@ -204,28 +204,28 @@ if (!empty($_POST)) {
                   <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                     <thead>
                       <tr>
-                        <th class="text-center">ID</th>
-                        <th class="text-center">Nombre completo</th>
-                        <th class="text-center">Dni</th>
-                        <th class="text-center">Dirección</th>
-                        <th class="text-center">Núm.Tel.</th>
-                        <th class="text-center">Email</th>
-                        <th class="text-center">Fecha Nac.</th>
-                        <th class="text-center">Fecha alta</th>
+                        <th >ID</th>
+                        <th >Nombre completo</th>
+                        <th >Dni</th>
+                        <th >Dirección</th>
+                        <th >Núm.Tel.</th>
+                        <th >Email</th>
+                        <th >Fecha Nac.</th>
+                        <th >Fecha alta</th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
                       foreach ($teacherController->get_all_teachers()  as $teacher) { ?>
                         <tr>
-                          <td class="text-center"><?= $teacher['id'] ?></td>
-                          <td class="text-center"><?= $teacher['name'] . ' ' .  $teacher['surname'] ?></td>
-                          <td class="text-center"><?= $teacher['dni'] ?> </td>
-                          <td class="text-center"><?= $teacher['address'] ?> </td>
-                          <td class="text-center"><?= $teacher['private_phone_number'] ?> </td>
-                          <td class="text-center"><?= $teacher['email'] ?> </td>
-                          <td class="text-center"><?= $teacher['birth_date'] ?> </td>
-                          <td class="text-center"><?= $teacher['created_at'] ?> </td>
+                          <td ><?= $teacher['id'] ?></td>
+                          <td ><?= $teacher['name'] . ' ' .  $teacher['surname'] ?></td>
+                          <td ><?= $teacher['dni'] ?> </td>
+                          <td ><?= $teacher['address'] ?> </td>
+                          <td ><?= $teacher['private_phone_number'] ?> </td>
+                          <td ><?= $teacher['email'] ?> </td>
+                          <td ><?= $teacher['birth_date'] ?> </td>
+                          <td ><?= $teacher['created_at'] ?> </td>
                         </tr>
                       <?php } ?>
                     </tbody>
@@ -291,12 +291,15 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
-
+  
+  <script src="<?php echo BASE_URL; ?>/dist/js/adminlte.min.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/confirm.js"></script>
+  <script src="<?php echo BASE_URL; ?>/dist/js/options_export_file.js"></script>
+    <script src="<?php echo BASE_URL; ?>/dist/js/datatable.js"></script>
   <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
 
   <script>
+    datatable(':visible');    
     function create_teacher() {
 
       return confirm('#create_teacher', false);
