@@ -327,13 +327,15 @@ class Student
     function get_all_student_actives()
     {
         try {
-            $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,GROUP_CONCAT(a.name) as activities,s.private_phone_number FROM ". $this->table_name ." s 
+            $date= date('Y-m-d');
+            $date = substr($date, 0, 4) . '-' . substr($date, 6, 2) . '-' . '01';
+
+            $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,GROUP_CONCAT(a.name) as activities,s.private_phone_number,(SELECT ss2.id FROM " . $this->table_name4 . " ss2 WHERE ss2.student_id=s.id and ss2.share_date ='$date' LIMIT 0,1) as share_pay FROM ". $this->table_name ." s 
             LEFT JOIN ". $this->table_name6 ." sa ON (s.id=sa.student_id)
             LEFT JOIN ". $this->table_name9 ." a ON (sa.activity_id=a.id)
             WHERE s.active=1 
             GROUP BY s.id
         ";
-
             $stmt = $this->conn->prepare($query);
 
             $stmt->execute();

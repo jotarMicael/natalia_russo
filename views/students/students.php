@@ -108,6 +108,7 @@ if (!empty($_POST)) {
                         <th>DNI</th>
                         <th>Actividades</th>
                         <th>Número privado</th>
+                        <th>Mes corriente abonado</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -128,6 +129,11 @@ if (!empty($_POST)) {
                           <td><?php echo $student['dni'] ?></td>
                           <td><?php echo $student['activities'] ?></td>
                           <td><?php echo $student['private_phone_number'] ?></td>
+                          <?php if ($student['share_pay'] != '') { ?>
+                            <td align="center" width="12%" style="background-color: #90EE90" ><strong>Si</strong></td>
+                            <?php } else{?>
+                            <td  align="center" width="12%" style="background-color: #90EE90" ><strong>No</strong></td>
+                            <?php } ?>
                           <td class="project-actions text-center">
                             <a onclick="open_technical_sheet('<?= $student['id'] ?>','<?= $student['type'] ?>');" type="button" class="btn btn-sm bg-danger ">
                               <i class="fas fa-file-pdf">
@@ -210,7 +216,7 @@ if (!empty($_POST)) {
   <script src="<?php echo BASE_URL; ?>/dist/js/dont_forward.js"></script>
   <script>
 
-     datatable([0,1,2,3,4]);              
+     datatable([0,1,2,3,4,5]);              
     
     function send_delete_id(id) {
       $('#delete_id').val(id);
