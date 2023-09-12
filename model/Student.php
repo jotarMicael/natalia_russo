@@ -328,7 +328,7 @@ class Student
     {
         try {
             $date= date('Y-m-d');
-            $date = substr($date, 0, 4) . '-' . substr($date, 6, 2) . '-' . '01';
+            $date = substr($date, 0, 4) . '-' . substr($date, 5, 2) . '-' . '01';
 
             $query = " SELECT s.id,s.name,s.type,s.surname,s.dni,GROUP_CONCAT(a.name) as activities,s.private_phone_number,(SELECT ss2.id FROM " . $this->table_name4 . " ss2 WHERE ss2.student_id=s.id and ss2.share_date ='$date' LIMIT 0,1) as share_pay FROM ". $this->table_name ." s 
             LEFT JOIN ". $this->table_name6 ." sa ON (s.id=sa.student_id)
@@ -379,7 +379,7 @@ class Student
              FROM " . $this->table_name4 . "  ss 
              WHERE ss.student_id = s.id) AS shares
              FROM " . $this->table_name . " s 
-                INNER JOIN " . $this->table_name3 . " sw ON (s.social_work_id=sw.id)
+                LEFT JOIN " . $this->table_name3 . " sw ON (s.social_work_id=sw.id)
             WHERE s.id=:id and s.active=1
             GROUP BY s.id
             LIMIT 0,1
