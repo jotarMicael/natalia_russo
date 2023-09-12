@@ -5,6 +5,10 @@ include  ROOTPATH . "/fpdf/fpdf.php";
 require_once(ROOTPATH . '/vendor/autoload.php');
 require_once 'get_age.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 use setasign\Fpdi\Fpdi;
 
 $pdf = new Fpdi();

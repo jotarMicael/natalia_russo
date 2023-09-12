@@ -100,7 +100,7 @@ if (!empty($_POST)) {
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <table id="example1" class="table table-bordered table-striped table-hover">
+                  <table id="example1" class="table table-bordered table-striped table-hover table-sm">
                     <thead>
                       <tr>
                         <th>Nombre</th>
