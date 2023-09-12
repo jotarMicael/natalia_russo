@@ -132,7 +132,7 @@ if (!empty($_POST)) {
                           <?php if ($student['share_pay'] != '') { ?>
                             <td align="center" width="12%" style="background-color: #90EE90" ><strong>Si</strong></td>
                             <?php } else{?>
-                            <td  align="center" width="12%" style="background-color: #90EE90" ><strong>No</strong></td>
+                            <td  align="center" width="12%" style="background-color: #E4605E" ><strong>No</strong></td>
                             <?php } ?>
                           <td class="project-actions text-center">
                             <a onclick="open_technical_sheet('<?= $student['id'] ?>','<?= $student['type'] ?>');" type="button" class="btn btn-sm bg-danger ">
