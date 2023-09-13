@@ -2,9 +2,9 @@
 
 function get_age($birthdate)
 {
-    $fecha_nacimiento;
-    $secondDate = date('Y-m-d');
-    return floor(abs(strtotime($secondDate) - strtotime($birthdate)) / (365 * 60 * 60 * 24));
+
+    
+    return floor(abs(strtotime(date('Y-m-d')) - strtotime($birthdate)) / (365 * 60 * 60 * 24));
 }
 
 
